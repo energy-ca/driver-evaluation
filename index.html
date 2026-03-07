@@ -3,99 +3,162 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Class 1 Oilfield Evaluation</title>
+    <title>Class 1 Field Eval</title>
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
     <style>
-        :root { --red: #ea4335; --green: #34a853; --blue: #4285f4; --dark: #121212; }
-        body { font-family: sans-serif; background: var(--dark); color: white; padding: 15px; }
-        #gate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 1000; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        .section { background: #1e1e1e; padding: 15px; border-radius: 12px; margin-bottom: 20px; border-top: 4px solid var(--blue); }
-        .controls { display: flex; gap: 10px; margin-bottom: 10px; }
-        .btn-start { flex: 1; background: var(--green); color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; }
-        .btn-stop { flex: 1; background: var(--red); color: white; border: none; padding: 12px; border-radius: 6px; font-weight: bold; }
-        input, textarea { width: 100%; background: #2b2b2b; color: white; border: 1px solid #444; border-radius: 8px; padding: 12px; box-sizing: border-box; margin-top: 5px; }
-        canvas { background: white; border-radius: 8px; width: 100%; height: 120px; }
-        .desc { font-size: 13px; color: #888; margin-bottom: 10px; line-height: 1.4; }
+        :root { --red: #ff4444; --green: #00c851; --blue: #33b5e5; --dark: #121212; --card: #1e1e1e; }
+        body { font-family: -apple-system, system-ui, sans-serif; background: var(--dark); color: white; margin: 0; padding: 10px; }
+        
+        /* PIN GATE */
+        #gate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        #gate input { font-size: 40px; width: 180px; text-align: center; background: #222; border: 2px solid var(--blue); color: white; border-radius: 12px; letter-spacing: 8px; }
+
+        /* HEADER & INFO */
+        .header { text-align: center; padding: 20px 0; border-bottom: 1px solid #333; margin-bottom: 20px; }
+        label { display: block; margin-top: 15px; color: var(--blue); font-weight: bold; font-size: 14px; }
+        input, textarea { width: 100%; background: #2b2b2b; color: white; border: 1px solid #444; border-radius: 8px; padding: 12px; box-sizing: border-box; font-size: 16px; margin-top: 5px; }
+
+        /* SECTION CARDS */
+        .section { background: var(--card); padding: 20px; border-radius: 15px; margin-bottom: 25px; box-shadow: 0 4px 6px rgba(0,0,0,0.3); }
+        h3 { margin: 0; color: #fff; font-size: 18px; }
+        .desc { font-size: 13px; color: #999; margin: 8px 0 15px 0; line-height: 1.4; }
+
+        /* RECORDING CONTROLS */
+        .controls { display: flex; gap: 10px; margin-bottom: 15px; }
+        .btn { flex: 1; padding: 15px; border: none; border-radius: 10px; font-weight: bold; font-size: 14px; cursor: pointer; text-transform: uppercase; }
+        .btn-start { background: #333; color: var(--green); border: 1px solid var(--green); }
+        .btn-stop { background: #333; color: var(--red); border: 1px solid var(--red); }
+        
+        /* FLASHING ANIMATION */
+        @keyframes pulse-red {
+            0% { background: #333; }
+            50% { background: #600; box-shadow: 0 0 15px var(--red); }
+            100% { background: #333; }
+        }
+        .recording-active { animation: pulse-red 1s infinite; color: white !important; border: none !important; }
+        .input-active { border: 1px solid var(--green) !important; background: #1a2e1a !important; }
+
+        /* SIGNATURES */
+        .sig-wrapper { background: white; border-radius: 10px; margin-top: 10px; position: relative; }
+        canvas { width: 100%; height: 180px; touch-action: none; border-radius: 10px; }
+        .clear-link { color: var(--blue); font-size: 12px; text-decoration: underline; background: none; border: none; padding: 10px; cursor: pointer; }
+
+        .submit-btn { width: 100%; background: var(--blue); color: white; border: none; padding: 20px; border-radius: 15px; font-size: 18px; font-weight: bold; margin: 30px 0; }
     </style>
 </head>
 <body>
 
     <div id="gate">
-        <p>Fleet Access Code</p>
+        <h2 style="color: var(--blue)">ACCESS CODE</h2>
         <input type="password" id="pin" maxlength="4" oninput="if(this.value==='2008') document.getElementById('gate').style.display='none'">
     </div>
 
-    <h1>Driver Evaluation</h1>
+    <div class="header">
+        <h1 style="margin:0; font-size: 24px;">CLASS 1 EVALUATION</h1>
+        <p style="color:#666; font-size: 12px;">AB/BC OILFIELD STANDARDS</p>
+    </div>
 
     <div class="section">
-        <label>Evaluation Date</label>
+        <label>EVALUATION DATE</label>
         <input type="date" id="evalDate">
-        <label>Driver Name</label>
-        <input type="text" id="driverName" placeholder="Full Name">
-        <label>Unit #</label>
-        <input type="text" id="unitNum" placeholder="Truck/Trailer ID">
+        <label>DRIVER NAME</label>
+        <input type="text" id="driverName" placeholder="Enter full name">
+        <label>UNIT / TRUCK #</label>
+        <input type="text" id="unitNum" placeholder="e.g. T-104">
     </div>
 
     <div class="section">
         <h3>1. Trip Prep & Air Brakes</h3>
-        <p class="desc">Includes Pre-trip inspection, logbook verification, air system leak tests, and brake adjustments.</p>
+        <p class="desc">Pre-trip inspection, logbooks, air leak tests, and equipment inventory check.</p>
         <div class="controls">
-            <button class="btn-start" onclick="startRec('txt1')">START REC</button>
-            <button class="btn-stop" onclick="stopRec()">STOP</button>
+            <button class="btn btn-start" id="start1" onclick="voiceStart('txt1', 'start1', 'stop1')">Start</button>
+            <button class="btn btn-stop" id="stop1" onclick="voiceStop('start1', 'stop1')">Stop</button>
         </div>
-        <textarea id="txt1" rows="3" placeholder="Waiting for voice..."></textarea>
+        <textarea id="txt1" placeholder="Tap Start to dictate..."></textarea>
     </div>
 
     <div class="section">
-        <h3>5. Final Summary</h3>
-        <p class="desc">Overall competency, safety mindset, and dispatch readiness recommendation.</p>
+        <h3>2. Coupling & Yard Maneuvers</h3>
+        <p class="desc">Connection/disconnection of trailer, 5th wheel lock, and precise backing maneuvers.</p>
         <div class="controls">
-            <button class="btn-start" onclick="startRec('txt5')">START REC</button>
-            <button class="btn-stop" onclick="stopRec()">STOP</button>
+            <button class="btn btn-start" id="start2" onclick="voiceStart('txt2', 'start2', 'stop2')">Start</button>
+            <button class="btn btn-stop" id="stop2" onclick="voiceStop('start2', 'stop2')">Stop</button>
         </div>
-        <textarea id="txt5" rows="3"></textarea>
+        <textarea id="txt2" placeholder="Tap Start to dictate..."></textarea>
     </div>
 
     <div class="section">
         <h3>Signatures</h3>
-        <canvas id="sigTrainer"></canvas>
-        <button onclick="sig1.clear()" style="margin-bottom:10px">Clear Trainer</button>
-        <canvas id="sigDriver"></canvas>
-        <button onclick="sig2.clear()">Clear Driver</button>
+        <label>TRAINER SIGNATURE</label>
+        <div class="sig-wrapper"><canvas id="sig1"></canvas></div>
+        <button class="clear-link" onclick="signature1.clear()">Clear Signature</button>
+
+        <label style="margin-top:20px;">DRIVER SIGNATURE</label>
+        <div class="sig-wrapper"><canvas id="sig2"></canvas></div>
+        <button class="clear-link" onclick="signature2.clear()">Clear Signature</button>
     </div>
 
-    <button id="submitBtn" onclick="sendData()" style="width:100%; background:var(--green); color:white; padding:20px; border:none; border-radius:12px; font-size:20px;">SUBMIT & CLEAN WITH AI</button>
+    <button class="submit-btn" onclick="submitData()">SUBMIT FINAL EVALUATION</button>
 
     <script>
-        // Set default date to today
+        // Set Today's Date
         document.getElementById('evalDate').valueAsDate = new Date();
 
-        let recognition;
-        const sig1 = new SignaturePad(document.getElementById('sigTrainer'));
-        const sig2 = new SignaturePad(document.getElementById('sigDriver'));
+        // Fix Signature Quality for Mobile
+        function resizeCanvas(canvas) {
+            const ratio = Math.max(window.devicePixelRatio || 1, 1);
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext("2d").scale(ratio, ratio);
+        }
 
-        function startRec(id) {
+        const canvas1 = document.getElementById('sig1');
+        const canvas2 = document.getElementById('sig2');
+        const signature1 = new SignaturePad(canvas1);
+        const signature2 = new SignaturePad(canvas2);
+
+        window.addEventListener("resize", () => { resizeCanvas(canvas1); resizeCanvas(canvas2); });
+        resizeCanvas(canvas1); resizeCanvas(canvas2);
+
+        // Voice Logic
+        let recognition;
+        function voiceStart(areaId, sBtn, pBtn) {
+            const area = document.getElementById(areaId);
+            const stopBtn = document.getElementById(pBtn);
+            
             recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
             recognition.continuous = true;
             recognition.interimResults = true;
             recognition.lang = 'en-US';
 
-            recognition.onresult = (event) => {
-                let final = "";
-                for (let i = event.resultIndex; i < event.results.length; ++i) {
-                    if (event.results[i].isFinal) final += event.results[i][0].transcript;
-                }
-                document.getElementById(id).value += final;
+            recognition.onstart = () => {
+                stopBtn.classList.add('recording-active');
+                area.classList.add('input-active');
             };
+
+            recognition.onresult = (event) => {
+                let current = "";
+                for (let i = event.resultIndex; i < event.results.length; ++i) {
+                    if (event.results[i].isFinal) current += event.results[i][0].transcript;
+                }
+                area.value += current + " ";
+            };
+            
             recognition.start();
         }
 
-        function stopRec() {
-            if (recognition) recognition.stop();
+        function voiceStop(sBtn, pBtn) {
+            if (recognition) {
+                recognition.stop();
+                document.getElementById(pBtn).classList.remove('recording-active');
+                // Remove green glow from all textareas
+                document.querySelectorAll('textarea').forEach(t => t.classList.remove('input-active'));
+            }
         }
 
-        function sendData() {
-            // Fetch logic to Google Script URL...
+        function submitData() {
+            alert("Sending to Sheets...");
+            // Your fetch() logic remains the same
         }
     </script>
 </body>
