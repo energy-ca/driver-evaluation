@@ -1,55 +1,73 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Voice Form</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Class 1 Eval - AB/BC</title>
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 50px; background: #f4f4f4; }
-        #micBtn { width: 100px; height: 100px; border-radius: 50%; border: none; background: #ea4335; color: white; font-size: 30px; cursor: pointer; }
-        #status { margin: 20px; font-weight: bold; }
+        body { font-family: sans-serif; background: #1a1a1a; color: white; padding: 20px; }
+        #gate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: #000; z-index: 999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
+        input[type="password"] { font-size: 30px; width: 150px; text-align: center; background: #222; border: 1px solid #444; color: white; padding: 10px; border-radius: 8px; }
+        .form-section { background: #222; padding: 15px; border-radius: 10px; margin-bottom: 20px; border-left: 5px solid #ea4335; display: none; }
+        .mic-btn { background: #ea4335; color: white; border: none; padding: 15px; border-radius: 5px; width: 100%; margin: 10px 0; font-size: 16px; cursor: pointer; }
+        textarea { width: 100%; background: #333; color: white; border: none; padding: 10px; border-radius: 5px; box-sizing: border-box; }
+        canvas { background: white; border-radius: 5px; width: 100%; height: 150px; }
     </style>
 </head>
 <body>
-    <h2>Driver Evaluation</h2>
-    <button id="micBtn">🎤</button>
-    <div id="status">Ready</div>
-    <textarea id="output" rows="5" style="width:80%"></textarea>
+
+    <div id="gate">
+        <h2>ENTER ACCESS CODE</h2>
+        <input type="password" id="code" maxlength="4" oninput="checkCode(this.value)">
+    </div>
+
+    <div id="mainForm">
+        <h1>Driver Evaluation</h1>
+        
+        <div class="form-section" style="display:block;">
+            <h3>1. Pre-Trip & Air Brakes</h3>
+            <button class="mic-btn" onclick="startVoice('eval1')">🎤 Record Comments</button>
+            <textarea id="eval1" rows="3"></textarea>
+        </div>
+
+        <div class="form-section" style="display:block;">
+            <h3>2. Coupling & Yard</h3>
+            <button class="mic-btn" onclick="startVoice('eval2')">🎤 Record Comments</button>
+            <textarea id="eval2" rows="3"></textarea>
+        </div>
+
+        <div class="form-section" style="display:block;">
+            <h3>Signatures</h3>
+            <p>Trainer Signature:</p>
+            <canvas id="sigTrainer"></canvas>
+            <p>Driver Signature:</p>
+            <canvas id="sigDriver"></canvas>
+        </div>
+
+        <button onclick="submitForm()" style="width:100%; background: #34a853; color: white; padding: 20px; border: none; border-radius: 10px; font-size: 20px;">SUBMIT EVALUATION</button>
+    </div>
 
     <script>
-        const btn = document.getElementById('micBtn');
-        const status = document.getElementById('status');
-        const output = document.getElementById('output');
-
-        btn.onclick = async () => {
-            try {
-                // GitHub allows this! No 'Permissions Policy' block here.
-                const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-                const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-                
-                recognition.onstart = () => { status.textContent = "Listening..."; };
-                recognition.onresult = (event) => {
-                    const text = event.results[0][0].transcript;
-                    output.value = text;
-                    sendToGoogle(text);
-                };
-                recognition.start();
-            } catch (e) {
-                status.textContent = "Error: " + e.message;
+        function checkCode(val) {
+            if (val === '2008') {
+                document.getElementById('gate').style.display = 'none';
             }
-        };
+        }
 
-        function sendToGoogle(text) {
-            status.textContent = "Saving to Google Sheets...";
-            // REPLACE THIS URL with your Google Script /exec link
-            const url = "YOUR_GOOGLE_SCRIPT_EXEC_URL";
-            
-            fetch(url, {
-                method: "POST",
-                mode: "no-cors", // This bypasses Google's security wall
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({ "transcript": text })
-            }).then(() => {
-                status.textContent = "✅ Saved!";
-            });
+        const sig1 = new SignaturePad(document.getElementById('sigTrainer'));
+        const sig2 = new SignaturePad(document.getElementById('sigDriver'));
+
+        async function startVoice(targetId) {
+            const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+            recognition.onresult = (event) => {
+                document.getElementById(targetId).value += event.results[0][0].transcript + " ";
+            };
+            recognition.start();
+        }
+
+        function submitForm() {
+            alert("Saving Evaluation and Signatures to Google Sheet...");
+            // Here we will add the fetch code to send to your Google Sheet!
         }
     </script>
 </body>
