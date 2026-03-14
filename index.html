@@ -1,205 +1,477 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Class 1 Oilfield Eval</title>
-    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
-    <style>
-        :root { --red: #ff4444; --green: #00c851; --blue: #33b5e5; --dark: #121212; --card: #1e1e1e; }
-        body { font-family: -apple-system, sans-serif; background: var(--dark); color: white; margin: 0; padding: 10px; padding-bottom: 50px; }
-        
-        #gate { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: black; z-index: 9999; display: flex; flex-direction: column; justify-content: center; align-items: center; }
-        #gate input { font-size: 40px; width: 180px; text-align: center; background: #222; border: 2px solid var(--blue); color: white; border-radius: 12px; letter-spacing: 8px; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Driver Evaluation</title>
 
-        .header { text-align: center; padding: 15px 0; border-bottom: 1px solid #333; }
-        .info-input { width: 100%; background: #2b2b2b; color: white; border: 1px solid #444; border-radius: 8px; padding: 12px; margin: 5px 0 15px 0; box-sizing: border-box; font-size: 16px; }
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
 
-        .section { background: var(--card); padding: 18px; border-radius: 15px; margin-bottom: 25px; border-top: 4px solid var(--blue); }
-        h3 { margin: 0; font-size: 18px; color: var(--blue); text-transform: uppercase; }
-        .desc { font-size: 12px; color: #aaa; margin: 8px 0 15px 0; font-style: italic; }
+<style>
 
-        .controls { display: flex; gap: 10px; margin-bottom: 12px; }
-        .btn { flex: 1; padding: 15px; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; }
-        .btn-start { background: #333; color: var(--green); border: 1px solid var(--green); }
-        .btn-stop { background: #333; color: var(--red); border: 1px solid var(--red); }
-        
-        @keyframes pulse { 0% { opacity: 1; } 50% { background: #600; } 100% { opacity: 1; } }
-        .rec-active { animation: pulse 1s infinite; color: white !important; border: none !important; }
-        .input-active { border: 1px solid var(--green) !important; }
+body{
+font-family:Arial;
+background:#111;
+color:white;
+margin:0;
+padding:15px;
+}
 
-        textarea { width: 100%; background: #2b2b2b; color: white; border: 1px solid #444; border-radius: 8px; padding: 12px; font-size: 16px; min-height: 100px; line-height: 1.5; }
+.section{
+background:#1d1d1d;
+padding:15px;
+margin-bottom:20px;
+border-radius:10px;
+}
 
-        .sig-container { background: white; border-radius: 10px; margin-top: 5px; }
-        canvas { width: 100%; height: 180px; touch-action: none; border-radius: 10px; }
-        .submit-btn { width: 100%; background: var(--green); color: white; border: none; padding: 22px; border-radius: 15px; font-size: 20px; font-weight: bold; margin-top: 30px; }
-    </style>
+textarea{
+width:100%;
+min-height:90px;
+background:#2a2a2a;
+color:white;
+border:1px solid #444;
+border-radius:6px;
+padding:10px;
+}
+
+input,select{
+width:100%;
+padding:10px;
+margin-bottom:10px;
+background:#2a2a2a;
+color:white;
+border:1px solid #444;
+border-radius:6px;
+}
+
+.controls{
+display:flex;
+gap:10px;
+margin-bottom:10px;
+}
+
+button{
+padding:12px;
+border:none;
+border-radius:6px;
+cursor:pointer;
+}
+
+.start{background:#222;color:#00e676}
+.stop{background:#222;color:#ff5252}
+.gpt{background:#1565c0;color:white}
+
+.rec-active{
+animation:blink 1s infinite;
+background:#600;
+color:white;
+}
+
+@keyframes blink{
+0%{opacity:1}
+50%{opacity:.3}
+100%{opacity:1}
+}
+
+canvas{
+background:white;
+border-radius:8px;
+width:100%;
+height:180px;
+}
+
+.approvalBox{
+display:none;
+}
+
+</style>
 </head>
+
 <body>
 
-    <div id="gate">
-        <h2 style="color: var(--blue)">FLEET PIN</h2>
-        <input type="password" id="pin" maxlength="4" oninput="if(this.value==='2008') document.getElementById('gate').style.display='none'">
-    </div>
+<h2>Driver Training & Assessment</h2>
 
-    <div class="header">
-        <h1>CLASS 1 EVALUATION</h1>
-        <p>AB / BC OILFIELD SPECIALIST</p>
-    </div>
+<div class="section">
 
-    <div class="section" style="border-top-color: #888;">
-        <label>DATE</label>
-        <input type="date" id="evalDate" class="info-input">
-        <label>DRIVER NAME</label>
-        <input type="text" id="driverName" class="info-input" placeholder="Full Name">
-        <label>UNIT #</label>
-        <input type="text" id="unitNum" class="info-input" placeholder="Truck ID">
-    </div>
+<label>Division</label>
+<select id="division">
+<option>Snubbing</option>
+<option>Nitrogen</option>
+<option>Shop</option>
+</select>
 
-    <div class="section">
-        <h3>1. General & Procedures</h3>
-        <p class="desc">Accident/Convoy Procedures, Congested Areas, Crane Trucks, Trailer Brakes.</p>
-        <div class="controls">
-            <button class="btn btn-start" onclick="voiceStart('txt1', this)">START</button>
-            <button class="btn btn-stop" onclick="voiceStop()">STOP</button>
-        </div>
-        <textarea id="txt1"></textarea>
-    </div>
+<label>Trainer</label>
+<select id="trainer">
+<option selected>Dave Feaver</option>
+<option>Other</option>
+</select>
 
-    <div class="section">
-        <h3>2. Off-Road & Traction</h3>
-        <p class="desc">Diff Lock/Chains, SWP Reviewed, Soft Shoulders, Radio Control Roads.</p>
-        <div class="controls">
-            <button class="btn btn-start" onclick="voiceStart('txt2', this)">START</button>
-            <button class="btn btn-stop" onclick="voiceStop()">STOP</button>
-        </div>
-        <textarea id="txt2"></textarea>
-    </div>
+<label>Driver</label>
+<input id="driver">
 
-    <div class="section">
-        <h3>3. Vehicle Control</h3>
-        <p class="desc">Gears on Hills, 3 Point Contact, Clutch Brake, Ditching, Samsara Review.</p>
-        <div class="controls">
-            <button class="btn btn-start" onclick="voiceStart('txt3', this)">START</button>
-            <button class="btn btn-stop" onclick="voiceStop()">STOP</button>
-        </div>
-        <textarea id="txt3"></textarea>
-    </div>
+<label>Date</label>
+<input type="date" id="date">
 
-    <div class="section">
-        <h3>4. Maneuvers & Clearance</h3>
-        <p class="desc">Backing, Obstacles, Spotters, 360° Checks, Mirrors, Tail Swing.</p>
-        <div class="controls">
-            <button class="btn btn-start" onclick="voiceStart('txt4', this)">START</button>
-            <button class="btn btn-stop" onclick="voiceStop()">STOP</button>
-        </div>
-        <textarea id="txt4"></textarea>
-    </div>
+<label>DL Class</label>
+<select id="dl_class">
+<option>1</option>
+<option>2</option>
+<option>3</option>
+<option>4</option>
+<option>5</option>
+<option>6</option>
+<option>7</option>
+</select>
 
-    <div class="section">
-        <h3>5. Defensive Driving</h3>
-        <p class="desc">Scanning, Anticipating Conflict, Speed for Conditions, Obeys Signs.</p>
-        <div class="controls">
-            <button class="btn btn-start" onclick="voiceStart('txt5', this)">START</button>
-            <button class="btn btn-stop" onclick="voiceStop()">STOP</button>
-        </div>
-        <textarea id="txt5"></textarea>
-    </div>
+<label>Endorsement</label>
+<select id="dl_end">
+<option value="">None</option>
+<option>Q</option>
+<option>B</option>
+<option>S</option>
+<option>F</option>
+</select>
 
-    <div class="section" style="border-top-color: #ffbb33;">
-        <h3>Evaluation Remarks</h3>
-        <label>STRENGTHS</label>
-        <textarea id="strengths" style="margin-bottom:15px;"></textarea>
-        <label>WEAKNESSES</label>
-        <textarea id="weakness" style="margin-bottom:15px;"></textarea>
-        <label>RECOMMENDATIONS</label>
-        <textarea id="recommendations"></textarea>
-    </div>
+<label>Units</label>
+<input id="units">
 
-    <div class="section">
-        <h3>Signatures</h3>
-        <label>TRAINER SIGNATURE</label>
-        <div class="sig-container"><canvas id="sig1"></canvas></div>
-        <button onclick="pad1.clear()" style="background:none; border:none; color:var(--blue); padding:10px;">Clear</button>
-        
-        <label style="margin-top:20px;">DRIVER SIGNATURE</label>
-        <div class="sig-container"><canvas id="sig2"></canvas></div>
-        <button onclick="pad2.clear()" style="background:none; border:none; color:var(--blue); padding:10px;">Clear</button>
-    </div>
+</div>
 
-    <button class="submit-btn" onclick="submitData()">SUBMIT TO SHEETS</button>
+<script>
+document.getElementById("date").valueAsDate=new Date()
+</script>
 
-    <script>
-        document.getElementById('evalDate').valueAsDate = new Date();
-        
-        let recognition;
-        let activeArea;
-        let activeStopBtn;
-        let final_transcript = '';
+<!-- SECTION TEMPLATE -->
 
-        function voiceStart(areaId, btn) {
-            if (recognition) recognition.stop();
-            
-            activeArea = document.getElementById(areaId);
-            activeStopBtn = btn.nextElementSibling;
-            final_transcript = activeArea.value; // Start with what's already there
+<script>
 
-            recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
-            recognition.continuous = true;
-            recognition.interimResults = true;
-            recognition.lang = 'en-US';
+let recognition
+let activeArea
+let stopBtn
 
-            recognition.onstart = () => {
-                activeStopBtn.classList.add('rec-active');
-                activeArea.classList.add('input-active');
-            };
+function voiceStart(id,btn){
 
-            recognition.onresult = (event) => {
-                let interim_transcript = '';
-                for (let i = event.resultIndex; i < event.results.length; ++i) {
-                    if (event.results[i].isFinal) {
-                        final_transcript += event.results[i][0].transcript + '. ';
-                    } else {
-                        interim_transcript += event.results[i][0].transcript;
-                    }
-                }
-                // Updates the box: Final Text + currently being spoken text
-                activeArea.value = final_transcript + interim_transcript;
-            };
+if(recognition)recognition.stop()
 
-            recognition.onerror = (event) => { console.log('Error: ' + event.error); };
-            recognition.onend = () => {
-                activeStopBtn.classList.remove('rec-active');
-                activeArea.classList.remove('input-active');
-            };
+activeArea=document.getElementById(id)
+stopBtn=btn.nextElementSibling
 
-            recognition.start();
-        }
+recognition=new(window.SpeechRecognition||window.webkitSpeechRecognition)()
+recognition.continuous=true
+recognition.interimResults=true
 
-        function voiceStop() {
-            if (recognition) recognition.stop();
-        }
+let final=""
 
-        // HD Signature Logic
-        const canvas1 = document.getElementById('sig1');
-        const canvas2 = document.getElementById('sig2');
-        const pad1 = new SignaturePad(canvas1);
-        const pad2 = new SignaturePad(canvas2);
+recognition.onstart=()=>{
+stopBtn.classList.add("rec-active")
+}
 
-        function resizeCanvas() {
-            [canvas1, canvas2].forEach(canvas => {
-                const ratio = Math.max(window.devicePixelRatio || 1, 1);
-                canvas.width = canvas.offsetWidth * ratio;
-                canvas.height = canvas.offsetHeight * ratio;
-                canvas.getContext("2d").scale(ratio, ratio);
-            });
-        }
-        window.onresize = resizeCanvas;
-        resizeCanvas();
+recognition.onresult=(e)=>{
 
-        function submitData() {
-            alert("Form Data Ready for Sheets!");
-        }
-    </script>
+let interim=""
+
+for(let i=e.resultIndex;i<e.results.length;i++){
+
+if(e.results[i].isFinal){
+final+=e.results[i][0].transcript+". "
+}else{
+interim+=e.results[i][0].transcript
+}
+
+}
+
+activeArea.value=final+interim
+
+}
+
+recognition.onend=()=>{
+stopBtn.classList.remove("rec-active")
+}
+
+recognition.start()
+
+}
+
+function voiceStop(){
+if(recognition)recognition.stop()
+}
+
+</script>
+
+<!-- SECTIONS -->
+
+<script>
+
+function section(id,title,desc){
+document.write(`
+<div class="section">
+
+<h3>${title}</h3>
+<p>${desc}</p>
+
+<div class="controls">
+<button class="start" onclick="voiceStart('${id}',this)">START</button>
+<button class="stop" onclick="voiceStop()">STOP</button>
+<button class="gpt" onclick="improve('${id}')">GPT Improve</button>
+</div>
+
+<textarea id="${id}"></textarea>
+
+</div>
+`)
+}
+
+</script>
+
+<script>
+
+section("s1","1 General & Procedures",
+"Accident procedures, inspections, coupling, chaining, backing, TDG")
+
+section("s2","2 Main Driving",
+"Shifting ability, steering control, speed control, following distance")
+
+section("s3","3 Intersections & RR Crossings",
+"Look reach listen, braking, gear control")
+
+section("s4","4 Equipment Operations",
+"Clutch, transmission, engine brake")
+
+section("s5","5 Defensive Driving",
+"Anticipating conflict, speed for conditions")
+
+</script>
+
+<!-- REMARKS -->
+
+<div class="section">
+
+<h3>Evaluation Remarks</h3>
+
+<label>Strengths</label>
+<textarea id="strengths"></textarea>
+
+<label>Weakness</label>
+<textarea id="weakness"></textarea>
+
+<label>Recommendations</label>
+<textarea id="recommendations"></textarea>
+
+</div>
+
+<!-- CONCLUSION -->
+
+<div class="section">
+
+<h3>Conclusion</h3>
+
+<button onclick="setConclusion('Not Approved')">Not Approved</button>
+<button onclick="setConclusion('Approved')">Approved</button>
+
+<div id="approvalMenu" class="approvalBox">
+
+<h4>Approved For</h4>
+
+<label><input type="checkbox" value="Tractor Trailer"> Tractor Trailer</label><br>
+<label><input type="checkbox" value="Tandem Steer"> Tandem Steer</label><br>
+<label><input type="checkbox" value="Over Dimension"> Over Dimension</label><br>
+<label><input type="checkbox" value="Automatic"> Automatic</label><br>
+<label><input type="checkbox" value="Manual"> Manual/Standard</label>
+
+</div>
+
+</div>
+
+<script>
+
+let conclusion=""
+
+function setConclusion(val){
+
+conclusion=val
+
+if(val=="Approved"){
+document.getElementById("approvalMenu").style.display="block"
+}else{
+document.getElementById("approvalMenu").style.display="none"
+}
+
+updateSummary()
+
+}
+
+</script>
+
+<!-- NEXT EVAL -->
+
+<div class="section">
+
+<h3>Estimate Next Evaluation</h3>
+
+<select id="next_eval">
+
+<option value="date">Date (+3 months)</option>
+<option>N/A</option>
+<option>Post Incidents/As Required</option>
+
+</select>
+
+</div>
+
+<!-- NOTES -->
+
+<div class="section">
+
+<h3>Notes</h3>
+
+<textarea id="notes"></textarea>
+
+</div>
+
+<!-- SUMMARY -->
+
+<div class="section">
+
+<h3>Conclusion Summary</h3>
+
+<div id="summary"></div>
+
+</div>
+
+<script>
+
+function updateSummary(){
+
+let approved=[]
+
+document.querySelectorAll("#approvalMenu input:checked")
+.forEach(x=>approved.push(x.value))
+
+let txt="Conclusion: "+conclusion
+
+if(approved.length){
+txt+="<br>Approved For: "+approved.join(", ")
+}
+
+document.getElementById("summary").innerHTML=txt
+
+}
+
+document.querySelectorAll("#approvalMenu input")
+.forEach(x=>x.onchange=updateSummary)
+
+</script>
+
+<!-- SIGNATURES -->
+
+<div class="section">
+
+<h3>Trainer Signature</h3>
+
+<canvas id="sig1"></canvas>
+<button onclick="pad1.clear()">Clear</button>
+
+<h3>Driver Signature</h3>
+
+<canvas id="sig2"></canvas>
+<button onclick="pad2.clear()">Clear</button>
+
+</div>
+
+<script>
+
+const canvas1=document.getElementById("sig1")
+const canvas2=document.getElementById("sig2")
+
+const pad1=new SignaturePad(canvas1)
+const pad2=new SignaturePad(canvas2)
+
+function resize(){
+
+[canvas1,canvas2].forEach(c=>{
+
+let r=Math.max(window.devicePixelRatio||1,1)
+
+c.width=c.offsetWidth*r
+c.height=c.offsetHeight*r
+
+c.getContext("2d").scale(r,r)
+
+})
+
+}
+
+window.onresize=resize
+resize()
+
+</script>
+
+<!-- SUBMIT -->
+
+<button onclick="submit()">Submit</button>
+
+<script>
+
+function submit(){
+
+let dl=
+document.getElementById("dl_class").value+
+document.getElementById("dl_end").value
+
+let nextEval=document.getElementById("next_eval").value
+
+if(nextEval=="date"){
+
+let d=new Date()
+
+d.setMonth(d.getMonth()+3)
+
+nextEval=d.toISOString().split("T")[0]
+
+}
+
+let approved=[]
+
+document.querySelectorAll("#approvalMenu input:checked")
+.forEach(x=>approved.push(x.value))
+
+let data={
+
+division:division.value,
+trainer:trainer.value,
+driver:driver.value,
+date:date.value,
+dl_class:dl,
+units:units.value,
+
+general:s1.value,
+main:s2.value,
+intersections:s3.value,
+equipment:s4.value,
+defensive:s5.value,
+
+strengths:strengths.value,
+weakness:weakness.value,
+recommendations:recommendations.value,
+
+conclusion:conclusion,
+approved_for:approved.join(", "),
+
+next_evaluation:nextEval,
+notes:notes.value,
+
+sig_trainer:pad1.toDataURL(),
+sig_driver:pad2.toDataURL()
+
+}
+
+console.log(data)
+
+alert("Ready for Apps Script")
+
+}
+
+</script>
+
 </body>
 </html>
