@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Driver Evaluation</title>
+<title>Driver Training Evaluation</title>
 
 <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
 
@@ -15,23 +15,29 @@ background:#111;
 color:white;
 margin:0;
 padding:15px;
+font-size:16px;
+}
+
+h2{
+text-align:center;
 }
 
 .section{
-background:#1d1d1d;
-padding:15px;
-margin-bottom:20px;
+background:#1e1e1e;
+padding:18px;
+margin-bottom:18px;
 border-radius:10px;
 }
 
 textarea{
 width:100%;
-min-height:90px;
+min-height:110px;
 background:#2a2a2a;
 color:white;
 border:1px solid #444;
 border-radius:6px;
 padding:10px;
+font-size:16px;
 }
 
 input,select{
@@ -42,24 +48,28 @@ background:#2a2a2a;
 color:white;
 border:1px solid #444;
 border-radius:6px;
+font-size:16px;
 }
 
 .controls{
 display:flex;
-gap:10px;
+flex-direction:column;
+gap:8px;
 margin-bottom:10px;
 }
 
 button{
+width:100%;
 padding:12px;
 border:none;
 border-radius:6px;
 cursor:pointer;
+font-size:16px;
 }
 
 .start{background:#222;color:#00e676}
 .stop{background:#222;color:#ff5252}
-.gpt{background:#1565c0;color:white}
+.improve{background:#1565c0;color:white}
 
 .rec-active{
 animation:blink 1s infinite;
@@ -82,6 +92,7 @@ height:180px;
 
 .approvalBox{
 display:none;
+margin-top:10px;
 }
 
 </style>
@@ -114,22 +125,15 @@ display:none;
 
 <label>DL Class</label>
 <select id="dl_class">
-<option>1</option>
-<option>2</option>
-<option>3</option>
-<option>4</option>
-<option>5</option>
-<option>6</option>
-<option>7</option>
+<option value="1">Class 1 – Tractor Trailer</option>
+<option value="3">Class 3 – Heavy Truck</option>
+<option value="5">Class 5 – Standard Vehicle</option>
 </select>
 
 <label>Endorsement</label>
 <select id="dl_end">
 <option value="">None</option>
-<option>Q</option>
-<option>B</option>
-<option>S</option>
-<option>F</option>
+<option value="Q">Q – Air Brake</option>
 </select>
 
 <label>Units</label>
@@ -141,13 +145,14 @@ display:none;
 document.getElementById("date").valueAsDate=new Date()
 </script>
 
-<!-- SECTION TEMPLATE -->
+<!-- VOICE SCRIPT -->
 
 <script>
 
 let recognition
 let activeArea
 let stopBtn
+let finalTranscript=""
 
 function voiceStart(id,btn){
 
@@ -155,12 +160,12 @@ if(recognition)recognition.stop()
 
 activeArea=document.getElementById(id)
 stopBtn=btn.nextElementSibling
+finalTranscript=activeArea.value
 
 recognition=new(window.SpeechRecognition||window.webkitSpeechRecognition)()
+
 recognition.continuous=true
 recognition.interimResults=true
-
-let final=""
 
 recognition.onstart=()=>{
 stopBtn.classList.add("rec-active")
@@ -173,14 +178,14 @@ let interim=""
 for(let i=e.resultIndex;i<e.results.length;i++){
 
 if(e.results[i].isFinal){
-final+=e.results[i][0].transcript+". "
+finalTranscript+=e.results[i][0].transcript+". "
 }else{
 interim+=e.results[i][0].transcript
 }
 
 }
 
-activeArea.value=final+interim
+activeArea.value=finalTranscript+interim
 
 }
 
@@ -198,12 +203,36 @@ if(recognition)recognition.stop()
 
 </script>
 
-<!-- SECTIONS -->
+<!-- IMPROVE BUTTON -->
+
+<script>
+
+function improve(id){
+
+let txt=document.getElementById(id).value
+
+if(!txt)return
+
+txt=txt.trim()
+
+txt=txt.charAt(0).toUpperCase()+txt.slice(1)
+
+if(!txt.endsWith(".")) txt+="."
+
+document.getElementById(id).value=txt
+
+}
+
+</script>
+
+<!-- SECTION GENERATOR -->
 
 <script>
 
 function section(id,title,desc){
+
 document.write(`
+
 <div class="section">
 
 <h3>${title}</h3>
@@ -212,52 +241,49 @@ document.write(`
 <div class="controls">
 <button class="start" onclick="voiceStart('${id}',this)">START</button>
 <button class="stop" onclick="voiceStop()">STOP</button>
-<button class="gpt" onclick="improve('${id}')">GPT Improve</button>
+<button class="improve" onclick="improve('${id}')">Improve</button>
 </div>
 
 <textarea id="${id}"></textarea>
 
 </div>
+
 `)
+
 }
 
 </script>
 
 <script>
 
-section("s1","1 General & Procedures",
+section("general","1 General & Procedures",
 "Accident procedures, inspections, coupling, chaining, backing, TDG")
 
-section("s2","2 Main Driving",
-"Shifting ability, steering control, speed control, following distance")
+section("main","2 Main Driving",
+"Shifting ability, steering control, lane tracking, following distance")
 
-section("s3","3 Intersections & RR Crossings",
-"Look reach listen, braking, gear control")
+section("intersections","3 Intersections & RR Crossings",
+"Look Reach Listen, braking, gear control")
 
-section("s4","4 Equipment Operations",
+section("equipment","4 Equipment Operations",
 "Clutch, transmission, engine brake")
 
-section("s5","5 Defensive Driving",
+section("defensive","5 Defensive Driving",
 "Anticipating conflict, speed for conditions")
 
 </script>
 
 <!-- REMARKS -->
 
-<div class="section">
+<script>
 
-<h3>Evaluation Remarks</h3>
+section("strengths","Strengths","Driver strengths observed")
 
-<label>Strengths</label>
-<textarea id="strengths"></textarea>
+section("weakness","Weakness","Areas needing improvement")
 
-<label>Weakness</label>
-<textarea id="weakness"></textarea>
+section("recommendations","Recommendations","Trainer recommendations")
 
-<label>Recommendations</label>
-<textarea id="recommendations"></textarea>
-
-</div>
+</script>
 
 <!-- CONCLUSION -->
 
@@ -276,7 +302,7 @@ section("s5","5 Defensive Driving",
 <label><input type="checkbox" value="Tandem Steer"> Tandem Steer</label><br>
 <label><input type="checkbox" value="Over Dimension"> Over Dimension</label><br>
 <label><input type="checkbox" value="Automatic"> Automatic</label><br>
-<label><input type="checkbox" value="Manual"> Manual/Standard</label>
+<label><input type="checkbox" value="Manual/Standard"> Manual/Standard</label>
 
 </div>
 
@@ -290,7 +316,7 @@ function setConclusion(val){
 
 conclusion=val
 
-if(val=="Approved"){
+if(val==="Approved"){
 document.getElementById("approvalMenu").style.display="block"
 }else{
 document.getElementById("approvalMenu").style.display="none"
@@ -308,25 +334,51 @@ updateSummary()
 
 <h3>Estimate Next Evaluation</h3>
 
-<select id="next_eval">
+<select id="next_type" onchange="nextEvalToggle()">
 
-<option value="date">Date (+3 months)</option>
-<option>N/A</option>
-<option>Post Incidents/As Required</option>
+<option value="date">Date (+3 Months)</option>
+<option value="post">Post Incidents / As Required</option>
+<option value="na">N/A</option>
 
 </select>
 
+<input type="date" id="next_date">
+
 </div>
+
+<script>
+
+function nextEvalToggle(){
+
+let type=document.getElementById("next_type").value
+let field=document.getElementById("next_date")
+
+if(type==="date"){
+
+field.style.display="block"
+
+let d=new Date()
+d.setMonth(d.getMonth()+3)
+
+field.value=d.toISOString().split("T")[0]
+
+}else{
+
+field.style.display="none"
+
+}
+
+}
+
+nextEvalToggle()
+
+</script>
 
 <!-- NOTES -->
 
-<div class="section">
-
-<h3>Notes</h3>
-
-<textarea id="notes"></textarea>
-
-</div>
+<script>
+section("notes","Notes","Additional notes")
+</script>
 
 <!-- SUMMARY -->
 
@@ -349,7 +401,7 @@ document.querySelectorAll("#approvalMenu input:checked")
 
 let txt="Conclusion: "+conclusion
 
-if(approved.length){
+if(conclusion==="Approved"){
 txt+="<br>Approved For: "+approved.join(", ")
 }
 
@@ -418,16 +470,19 @@ let dl=
 document.getElementById("dl_class").value+
 document.getElementById("dl_end").value
 
-let nextEval=document.getElementById("next_eval").value
+let nextType=document.getElementById("next_type").value
+let nextEval=""
 
-if(nextEval=="date"){
+if(nextType==="date"){
+nextEval=document.getElementById("next_date").value
+}
 
-let d=new Date()
+if(nextType==="post"){
+nextEval="Post Incidents / As Required"
+}
 
-d.setMonth(d.getMonth()+3)
-
-nextEval=d.toISOString().split("T")[0]
-
+if(nextType==="na"){
+nextEval="N/A"
 }
 
 let approved=[]
@@ -441,14 +496,15 @@ division:division.value,
 trainer:trainer.value,
 driver:driver.value,
 date:date.value,
+
 dl_class:dl,
 units:units.value,
 
-general:s1.value,
-main:s2.value,
-intersections:s3.value,
-equipment:s4.value,
-defensive:s5.value,
+general:general.value,
+main:main.value,
+intersections:intersections.value,
+equipment:equipment.value,
+defensive:defensive.value,
 
 strengths:strengths.value,
 weakness:weakness.value,
@@ -458,6 +514,7 @@ conclusion:conclusion,
 approved_for:approved.join(", "),
 
 next_evaluation:nextEval,
+
 notes:notes.value,
 
 sig_trainer:pad1.toDataURL(),
@@ -467,7 +524,7 @@ sig_driver:pad2.toDataURL()
 
 console.log(data)
 
-alert("Ready for Apps Script")
+alert("Form ready for Google Apps Script")
 
 }
 
