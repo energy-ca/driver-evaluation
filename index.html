@@ -325,6 +325,7 @@ document.getElementById('notes-container').innerHTML = `
 // ── VOICE ──
 let recognition=null, activeArea=null;
 let finalTranscript='', isRecording=false, restartTimer=null;
+let sessionId=0;
 
 function voiceStart(areaId, startBtn) {
   voiceStop();
@@ -338,11 +339,13 @@ function startSession() {
   if(!isRecording) return;
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if(!SR){ alert('Speech recognition requires Chrome.'); return; }
+  const thisSession = ++sessionId;
   recognition = new SR();
   recognition.continuous = true;
   recognition.interimResults = true;
   recognition.lang = 'en-US';
   recognition.onresult = (event) => {
+    if(thisSession !== sessionId) return;
     let interim = '';
     for(let i=event.resultIndex; i<event.results.length; i++){
       const t = event.results[i][0].transcript;
@@ -353,8 +356,14 @@ function startSession() {
     activeArea.scrollTop = activeArea.scrollHeight;
     activeArea.classList.add('input-active');
   };
-  recognition.onerror = (e) => { if(['network','audio-capture','no-speech'].includes(e.error)) scheduleRestart(); };
-  recognition.onend = () => { if(isRecording) scheduleRestart(); else cleanup(); };
+  recognition.onerror = (e) => {
+    if(thisSession !== sessionId) return;
+    if(['network','audio-capture','no-speech'].includes(e.error)) scheduleRestart();
+  };
+  recognition.onend = () => {
+    if(thisSession !== sessionId) return;
+    if(isRecording) scheduleRestart(); else cleanup();
+  };
   recognition.start();
 }
 function scheduleRestart(){ clearTimeout(restartTimer); restartTimer=setTimeout(()=>{ if(isRecording) startSession(); },350); }
