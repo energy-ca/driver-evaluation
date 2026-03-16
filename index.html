@@ -60,6 +60,38 @@
   textarea.fi { min-height:100px; line-height:1.5; resize:vertical; }
   textarea.input-active { border-color:var(--green) !important; }
 
+  /* ── AI PREVIEW PANEL ── */
+  .ai-preview {
+    display: none;
+    margin-top: 10px;
+    background: #0a1a2a;
+    border: 1px solid var(--blue);
+    border-radius: 10px;
+    overflow: hidden;
+    animation: fadeIn .2s ease;
+  }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
+  .ai-preview-header {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 8px 12px;
+    background: #0d2040;
+    border-bottom: 1px solid #1a3a5a;
+  }
+  .ai-preview-header span { font-size: 11px; font-weight: 700; color: var(--blue); letter-spacing: 1.5px; text-transform: uppercase; }
+  .ai-preview-text {
+    padding: 12px;
+    font-size: 14px;
+    line-height: 1.6;
+    color: #d0e8f8;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+  .ai-preview-actions { display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid #1a3a5a; }
+  .btn-accept  { flex:1; padding:11px; background:#0d2e1a; color:var(--green); border:1px solid var(--green); border-radius:8px; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:14px; cursor:pointer; letter-spacing:1px; }
+  .btn-accept:active  { background: var(--green); color:#000; }
+  .btn-discard { flex:1; padding:11px; background:#2e1a1a; color:var(--red);   border:1px solid var(--red);   border-radius:8px; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:14px; cursor:pointer; letter-spacing:1px; }
+  .btn-discard:active { background: var(--red); color:#000; }
+
   .section.amber { border-top-color:var(--amber); }
   .section.amber h3 { color:var(--amber); }
 
@@ -347,41 +379,88 @@ function scheduleRestart(){ clearTimeout(restartTimer); restartTimer=setTimeout(
 function voiceStop(){ isRecording=false; clearTimeout(restartTimer); if(recognition){recognition.stop();recognition=null;} cleanup(); }
 function cleanup(){ document.querySelectorAll('.btn-start').forEach(b=>b.classList.remove('rec-active')); if(activeArea) activeArea.classList.remove('input-active'); }
 
-// ── AI IMPROVE ──
-const aiPrompts = {
-  'General & Procedures': 'You are a professional oilfield fleet safety trainer writing a driver evaluation. Clean up these raw spoken notes for "General & Procedures" (accident/convoy procedures, pre-trip inspection, congested areas, crane trucks, trailer brakes). Fix grammar and punctuation. Professional, direct, concise. Do not add details. Return only the corrected text.',
-  'Off-Road & Traction':  'You are a professional oilfield fleet safety trainer. Clean up these raw notes for "Off-Road & Traction" (diff lock, chains, soft shoulders, radio roads, SWP). Fix grammar and punctuation. Professional and direct. Return only the corrected text.',
-  'Vehicle Control':      'You are a professional oilfield fleet safety trainer. Clean up these raw notes for "Vehicle Control" (hill gears, clutch-brake, 3-point contact, ditching, Samsara). Fix grammar and punctuation. Return only the corrected text.',
-  'Maneuvers & Clearance':'You are a professional oilfield fleet safety trainer. Clean up these raw notes for "Maneuvers & Clearance" (backing, tail swing, spotters, mirrors, 360° checks). Fix grammar and punctuation. Return only the corrected text.',
-  'Defensive Driving':    'You are a professional oilfield fleet safety trainer. Clean up these raw notes for "Defensive Driving" (scanning, speed for conditions, following distance, anticipation). Fix grammar and punctuation. Return only the corrected text.',
-  'strengths':            'You are a professional oilfield fleet safety trainer. Rewrite these as polished STRENGTHS observations. Fix grammar/punctuation. Professional tone. Return only the corrected text.',
-  'weaknesses':           'You are a professional oilfield fleet safety trainer. Rewrite these as polished WEAKNESSES/areas-for-improvement notes. Fix grammar/punctuation. Return only the corrected text.',
-  'recommendations':      'You are a professional oilfield fleet safety trainer. Rewrite these as clear, actionable RECOMMENDATIONS. Fix grammar/punctuation. Return only the corrected text.',
-  'general notes':        'You are a professional oilfield fleet safety trainer. Clean up these general evaluation notes. Fix grammar and punctuation. Professional tone. Return only the corrected text.',
-};
+// ── AI IMPROVE (routed through Apps Script — key never exposed in browser) ──
+// TODO: paste your deployed Apps Script Web App URL here after deployment
+const APPS_SCRIPT_URL = 'YOUR_APPS_SCRIPT_WEB_APP_URL';
 
 async function aiImprove(areaId, sectionKey) {
-  const area=document.getElementById(areaId);
-  const raw=area.value.trim();
-  if(!raw){ area.placeholder='Add some text first, then press AI.'; return; }
-  const controls=area.previousElementSibling;
-  const aiBtn=controls?controls.querySelector('.btn-ai'):null;
-  if(aiBtn){ aiBtn.textContent='⟳ AI'; aiBtn.classList.add('ai-loading'); }
+  const area = document.getElementById(areaId);
+  const raw  = area.value.trim();
+  if (!raw) { area.placeholder = 'Add some text first, then press ✦ AI.'; return; }
+
+  // Find or create the preview panel right after the textarea
+  let preview = area.nextElementSibling;
+  if (!preview || !preview.classList.contains('ai-preview')) {
+    preview = document.createElement('div');
+    preview.className = 'ai-preview';
+    preview.innerHTML = `
+      <div class="ai-preview-header">
+        <span>✦ AI Suggestion</span>
+        <span style="font-size:11px;color:var(--muted);">Review before accepting</span>
+      </div>
+      <div class="ai-preview-text"></div>
+      <div class="ai-preview-actions">
+        <button class="btn-accept"  onclick="acceptAI(this)">✔ ACCEPT</button>
+        <button class="btn-discard" onclick="discardAI(this)">✘ DISCARD</button>
+      </div>`;
+    area.insertAdjacentElement('afterend', preview);
+  }
+
+  const previewText = preview.querySelector('.ai-preview-text');
+  const controls    = area.previousElementSibling;
+  const aiBtn       = controls ? controls.querySelector('.btn-ai') : null;
+
+  // Show loading state
+  preview.style.display = 'block';
+  previewText.textContent = 'Improving your text…';
+  previewText.style.color = 'var(--muted)';
+  if (aiBtn) { aiBtn.textContent = '⟳ AI'; aiBtn.classList.add('ai-loading'); }
+
   try {
-    const resp=await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{'Content-Type':'application/json'},
-      body:JSON.stringify({
-        model:'claude-sonnet-4-20250514', max_tokens:600,
-        system: aiPrompts[sectionKey]||aiPrompts['general notes'],
-        messages:[{role:'user',content:raw}]
-      })
+    const resp = await fetch(APPS_SCRIPT_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body: JSON.stringify({ action: 'improveText', section: sectionKey, text: raw })
     });
-    const data=await resp.json();
-    const improved=data.content?.find(b=>b.type==='text')?.text?.trim()||'';
-    if(improved){ area.value=improved; finalTranscript=improved; }
-  } catch(err){ alert('AI improvement failed. Check connection.'); }
-  finally { if(aiBtn){ aiBtn.textContent='✦ AI'; aiBtn.classList.remove('ai-loading'); } }
+    const data = await resp.json();
+    if (data.error) throw new Error(data.error);
+    const improved = (data.result || '').trim();
+    if (improved) {
+      previewText.textContent = improved;
+      previewText.style.color = '#d0e8f8';
+      // Store the improved text on the preview so Accept can retrieve it
+      preview.dataset.improved = improved;
+      preview.dataset.areaId   = areaId;
+    } else {
+      throw new Error('Empty response from AI');
+    }
+  } catch (err) {
+    console.error('AI error:', err);
+    previewText.textContent = '⚠ AI improvement failed. Check that APPS_SCRIPT_URL is set and deployed as a public Web App.';
+    previewText.style.color = 'var(--red)';
+    preview.dataset.improved = '';
+  } finally {
+    if (aiBtn) { aiBtn.textContent = '✦ AI'; aiBtn.classList.remove('ai-loading'); }
+  }
+}
+
+function acceptAI(btn) {
+  const preview  = btn.closest('.ai-preview');
+  const areaId   = preview.dataset.areaId;
+  const improved = preview.dataset.improved;
+  if (areaId && improved) {
+    const area = document.getElementById(areaId);
+    area.value = improved;
+    finalTranscript = improved;  // keep voice engine in sync
+    // Flash green border to confirm
+    area.style.borderColor = 'var(--green)';
+    setTimeout(() => { area.style.borderColor = ''; }, 800);
+  }
+  preview.style.display = 'none';
+}
+
+function discardAI(btn) {
+  btn.closest('.ai-preview').style.display = 'none';
 }
 
 // ── CONCLUSION ──
