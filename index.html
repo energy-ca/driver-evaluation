@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-<meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Driver Training & Assessment</title>
+
+<title>Driver Training Assessment</title>
 
 <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
 
@@ -11,14 +11,11 @@
 
 body{
 font-family:Arial;
-background:#111;
+background:#121212;
 color:white;
 margin:0;
 padding:15px;
-font-size:16px;
 }
-
-/* PIN GATE */
 
 #gate{
 position:fixed;
@@ -27,11 +24,11 @@ left:0;
 width:100%;
 height:100%;
 background:black;
-z-index:9999;
 display:flex;
 flex-direction:column;
 justify-content:center;
 align-items:center;
+z-index:9999;
 }
 
 #gate input{
@@ -41,17 +38,15 @@ text-align:center;
 background:#222;
 border:2px solid #33b5e5;
 color:white;
-border-radius:12px;
+border-radius:10px;
 letter-spacing:8px;
 }
-
-/* SECTIONS */
 
 .section{
 background:#1e1e1e;
 padding:18px;
-margin-bottom:18px;
-border-radius:10px;
+border-radius:12px;
+margin-bottom:20px;
 }
 
 textarea{
@@ -60,7 +55,7 @@ min-height:110px;
 background:#2a2a2a;
 color:white;
 border:1px solid #444;
-border-radius:6px;
+border-radius:8px;
 padding:10px;
 font-size:16px;
 }
@@ -72,38 +67,50 @@ margin-bottom:10px;
 background:#2a2a2a;
 color:white;
 border:1px solid #444;
-border-radius:6px;
+border-radius:8px;
 }
 
 .controls{
 display:flex;
-flex-direction:column;
 gap:8px;
 margin-bottom:10px;
 }
 
 button{
-width:100%;
+flex:1;
 padding:12px;
 border:none;
-border-radius:6px;
-font-size:16px;
+border-radius:8px;
+font-weight:bold;
 cursor:pointer;
 }
 
-.start{background:#222;color:#00e676}
-.stop{background:#222;color:#ff5252}
+.start{background:#263238;color:#00e676}
+.stop{background:#263238;color:#ff5252}
 .improve{background:#1565c0;color:white}
 
 .rec-active{
 animation:blink 1s infinite;
-background:#600;
+background:#600 !important;
+color:white;
 }
 
 @keyframes blink{
 0%{opacity:1}
-50%{opacity:.3}
+50%{opacity:.4}
 100%{opacity:1}
+}
+
+.approveBtn{
+background:#00c853;
+color:white;
+font-size:18px;
+}
+
+.rejectBtn{
+background:#d50000;
+color:white;
+font-size:18px;
 }
 
 canvas{
@@ -127,7 +134,7 @@ margin-top:10px;
 
 <div id="gate">
 <h2 style="color:#33b5e5">FLEET PIN</h2>
-<input type="password" id="pin" maxlength="4" oninput="unlock()">
+<input type="password" maxlength="4" id="pin" oninput="unlock()">
 </div>
 
 <script>
@@ -194,34 +201,26 @@ let activeArea
 let stopBtn
 let finalTranscript=""
 
-function voiceStart(id,btn){
+function startRecognition(){
 
-if(recognition) recognition.stop()
+recognition=new (window.SpeechRecognition || window.webkitSpeechRecognition)()
 
-activeArea=document.getElementById(id)
-stopBtn=btn.nextElementSibling
-
-finalTranscript=activeArea.value
-
-recognition=new(window.SpeechRecognition||window.webkitSpeechRecognition)()
-
+recognition.lang="en-CA"
 recognition.continuous=true
 recognition.interimResults=true
 
-recognition.onstart=()=>{
-stopBtn.classList.add("rec-active")
-}
-
-recognition.onresult=(event)=>{
+recognition.onresult=function(event){
 
 let interim=""
 
 for(let i=event.resultIndex;i<event.results.length;i++){
 
+let transcript=event.results[i][0].transcript
+
 if(event.results[i].isFinal){
-finalTranscript+=event.results[i][0].transcript+". "
+finalTranscript+=transcript+" "
 }else{
-interim+=event.results[i][0].transcript
+interim+=transcript
 }
 
 }
@@ -230,21 +229,43 @@ activeArea.value=finalTranscript+interim
 
 }
 
-recognition.onend=()=>{
-stopBtn.classList.remove("rec-active")
+recognition.onend=function(){
+if(activeArea){
+startRecognition()
+recognition.start()
+}
 }
 
+}
+
+function voiceStart(id,btn){
+
+activeArea=document.getElementById(id)
+stopBtn=btn.nextElementSibling
+
+finalTranscript=activeArea.value
+
+startRecognition()
+
 recognition.start()
+
+stopBtn.classList.add("rec-active")
 
 }
 
 function voiceStop(){
-if(recognition) recognition.stop()
+
+if(recognition){
+recognition.stop()
+}
+
+stopBtn.classList.remove("rec-active")
+
 }
 
 </script>
 
-<!-- IMPROVE TEXT -->
+<!-- IMPROVE -->
 
 <script>
 
@@ -252,12 +273,13 @@ function improve(id){
 
 let txt=document.getElementById(id).value
 
-if(!txt) return
+if(!txt)return
 
 txt=txt.trim()
+
 txt=txt.charAt(0).toUpperCase()+txt.slice(1)
 
-if(!txt.endsWith(".")) txt+="."
+if(!txt.endsWith("."))txt+="."
 
 document.getElementById(id).value=txt
 
@@ -269,13 +291,13 @@ document.getElementById(id).value=txt
 
 <script>
 
-function section(id,title,desc){
+function section(id,title){
 
 document.write(`
+
 <div class="section">
 
 <h3>${title}</h3>
-<p>${desc}</p>
 
 <div class="controls">
 <button class="start" onclick="voiceStart('${id}',this)">START</button>
@@ -286,6 +308,7 @@ document.write(`
 <textarea id="${id}"></textarea>
 
 </div>
+
 `)
 
 }
@@ -294,26 +317,14 @@ document.write(`
 
 <script>
 
-section("general","1 General & Procedures",
-"Accident procedures, inspections, coupling, chaining, backing, TDG")
-
-section("main","2 Main Driving",
-"Shifting ability, steering control, lane tracking")
-
-section("intersections","3 Intersections & RR Crossings",
-"Look Reach Listen, braking and gear control")
-
-section("equipment","4 Equipment Operations",
-"Clutch, transmission, engine brake")
-
-section("defensive","5 Defensive Driving",
-"Anticipating conflict, speed for conditions")
-
-section("strengths","Strengths","Positive driver performance")
-
-section("weakness","Weakness","Areas needing improvement")
-
-section("recommendations","Recommendations","Trainer recommendations")
+section("general","1 General & Procedures")
+section("main","2 Main Driving")
+section("intersections","3 Intersections & RR Crossings")
+section("equipment","4 Equipment Operations")
+section("defensive","5 Defensive Driving")
+section("strengths","Strengths")
+section("weakness","Weakness")
+section("recommendations","Recommendations")
 
 </script>
 
@@ -323,12 +334,12 @@ section("recommendations","Recommendations","Trainer recommendations")
 
 <h3>Conclusion</h3>
 
-<button onclick="setConclusion('Not Approved')">Not Approved</button>
-<button onclick="setConclusion('Approved')">Approved</button>
+<div class="controls">
+<button class="approveBtn" onclick="setConclusion('Approved')">APPROVED</button>
+<button class="rejectBtn" onclick="setConclusion('Not Approved')">NOT APPROVED</button>
+</div>
 
 <div id="approvalMenu" class="approvalBox">
-
-<h4>Approved For</h4>
 
 <label><input type="checkbox" value="Tractor Trailer"> Tractor Trailer</label><br>
 <label><input type="checkbox" value="Tandem Steer"> Tandem Steer</label><br>
@@ -354,8 +365,6 @@ document.getElementById("approvalMenu").style.display="block"
 document.getElementById("approvalMenu").style.display="none"
 }
 
-updateSummary()
-
 }
 
 </script>
@@ -366,10 +375,12 @@ updateSummary()
 
 <h3>Estimate Next Evaluation</h3>
 
-<select id="next_type" onchange="nextEvalToggle()">
+<select id="next_type" onchange="toggleNextDate()">
+
 <option value="date">Date (+3 Months)</option>
-<option value="post">Post Incidents / As Required</option>
+<option value="post">Post Incident / As Required</option>
 <option value="na">N/A</option>
+
 </select>
 
 <input type="date" id="next_date">
@@ -378,7 +389,7 @@ updateSummary()
 
 <script>
 
-function nextEvalToggle(){
+function toggleNextDate(){
 
 let type=document.getElementById("next_type").value
 let field=document.getElementById("next_date")
@@ -400,47 +411,14 @@ field.style.display="none"
 
 }
 
-nextEvalToggle()
+toggleNextDate()
 
 </script>
 
 <!-- NOTES -->
 
 <script>
-section("notes","Notes","Additional notes")
-</script>
-
-<!-- SUMMARY -->
-
-<div class="section">
-
-<h3>Conclusion Summary</h3>
-<div id="summary"></div>
-
-</div>
-
-<script>
-
-function updateSummary(){
-
-let approved=[]
-
-document.querySelectorAll("#approvalMenu input:checked")
-.forEach(x=>approved.push(x.value))
-
-let txt="Conclusion: "+conclusion
-
-if(conclusion==="Approved"){
-txt+="<br>Approved For: "+approved.join(", ")
-}
-
-document.getElementById("summary").innerHTML=txt
-
-}
-
-document.querySelectorAll("#approvalMenu input")
-.forEach(x=>x.onchange=updateSummary)
-
+section("notes","Notes")
 </script>
 
 <!-- SIGNATURES -->
@@ -482,73 +460,6 @@ c.getContext("2d").scale(ratio,ratio)
 
 window.onresize=resize
 resize()
-
-</script>
-
-<button onclick="submit()">Submit</button>
-
-<script>
-
-function submit(){
-
-let dl=document.getElementById("dl_class").value+
-document.getElementById("dl_end").value
-
-let nextType=document.getElementById("next_type").value
-let nextEval=""
-
-if(nextType==="date"){
-nextEval=document.getElementById("next_date").value
-}
-
-if(nextType==="post"){
-nextEval="Post Incidents / As Required"
-}
-
-if(nextType==="na"){
-nextEval="N/A"
-}
-
-let approved=[]
-document.querySelectorAll("#approvalMenu input:checked")
-.forEach(x=>approved.push(x.value))
-
-let data={
-
-division:division.value,
-trainer:trainer.value,
-driver:driver.value,
-date:date.value,
-
-dl_class:dl,
-units:units.value,
-
-general:general.value,
-main:main.value,
-intersections:intersections.value,
-equipment:equipment.value,
-defensive:defensive.value,
-
-strengths:strengths.value,
-weakness:weakness.value,
-recommendations:recommendations.value,
-
-conclusion:conclusion,
-approved_for:approved.join(", "),
-
-next_evaluation:nextEval,
-notes:notes.value,
-
-sig_trainer:pad1.toDataURL(),
-sig_driver:pad2.toDataURL()
-
-}
-
-console.log(data)
-
-alert("Form ready for Google Apps Script")
-
-}
 
 </script>
 
