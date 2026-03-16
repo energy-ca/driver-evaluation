@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Driver Training Evaluation</title>
+<title>Driver Training & Assessment</title>
 
 <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.0.0/dist/signature_pad.umd.min.js"></script>
 
@@ -18,9 +18,34 @@ padding:15px;
 font-size:16px;
 }
 
-h2{
-text-align:center;
+/* PIN GATE */
+
+#gate{
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:100%;
+background:black;
+z-index:9999;
+display:flex;
+flex-direction:column;
+justify-content:center;
+align-items:center;
 }
+
+#gate input{
+font-size:40px;
+width:180px;
+text-align:center;
+background:#222;
+border:2px solid #33b5e5;
+color:white;
+border-radius:12px;
+letter-spacing:8px;
+}
+
+/* SECTIONS */
 
 .section{
 background:#1e1e1e;
@@ -48,7 +73,6 @@ background:#2a2a2a;
 color:white;
 border:1px solid #444;
 border-radius:6px;
-font-size:16px;
 }
 
 .controls{
@@ -63,8 +87,8 @@ width:100%;
 padding:12px;
 border:none;
 border-radius:6px;
-cursor:pointer;
 font-size:16px;
+cursor:pointer;
 }
 
 .start{background:#222;color:#00e676}
@@ -74,7 +98,6 @@ font-size:16px;
 .rec-active{
 animation:blink 1s infinite;
 background:#600;
-color:white;
 }
 
 @keyframes blink{
@@ -99,12 +122,25 @@ margin-top:10px;
 </head>
 
 <body>
-<div id="gate"> <h2 style="color: var(--blue)">FLEET PIN</h2> 
-  <input type="password" id="pin" maxlength="4" oninput="if(this.value==='2008') document.getElementById('gate').style.display='none'"> 
-</div> 
-  <div class="header"> <h1>CLASS 1 EVALUATION</h1> <p>AB / BC OILFIELD SPECIALIST</p> 
-  </div>
+
+<!-- PIN ACCESS -->
+
+<div id="gate">
+<h2 style="color:#33b5e5">FLEET PIN</h2>
+<input type="password" id="pin" maxlength="4" oninput="unlock()">
+</div>
+
+<script>
+function unlock(){
+if(document.getElementById("pin").value==="2008"){
+document.getElementById("gate").style.display="none"
+}
+}
+</script>
+
 <h2>Driver Training & Assessment</h2>
+
+<!-- HEADER -->
 
 <div class="section">
 
@@ -149,7 +185,7 @@ margin-top:10px;
 document.getElementById("date").valueAsDate=new Date()
 </script>
 
-<!-- VOICE SCRIPT -->
+<!-- VOICE ENGINE -->
 
 <script>
 
@@ -160,10 +196,11 @@ let finalTranscript=""
 
 function voiceStart(id,btn){
 
-if(recognition)recognition.stop()
+if(recognition) recognition.stop()
 
 activeArea=document.getElementById(id)
 stopBtn=btn.nextElementSibling
+
 finalTranscript=activeArea.value
 
 recognition=new(window.SpeechRecognition||window.webkitSpeechRecognition)()
@@ -175,16 +212,16 @@ recognition.onstart=()=>{
 stopBtn.classList.add("rec-active")
 }
 
-recognition.onresult=(e)=>{
+recognition.onresult=(event)=>{
 
 let interim=""
 
-for(let i=e.resultIndex;i<e.results.length;i++){
+for(let i=event.resultIndex;i<event.results.length;i++){
 
-if(e.results[i].isFinal){
-finalTranscript+=e.results[i][0].transcript+". "
+if(event.results[i].isFinal){
+finalTranscript+=event.results[i][0].transcript+". "
 }else{
-interim+=e.results[i][0].transcript
+interim+=event.results[i][0].transcript
 }
 
 }
@@ -202,12 +239,12 @@ recognition.start()
 }
 
 function voiceStop(){
-if(recognition)recognition.stop()
+if(recognition) recognition.stop()
 }
 
 </script>
 
-<!-- IMPROVE BUTTON -->
+<!-- IMPROVE TEXT -->
 
 <script>
 
@@ -215,10 +252,9 @@ function improve(id){
 
 let txt=document.getElementById(id).value
 
-if(!txt)return
+if(!txt) return
 
 txt=txt.trim()
-
 txt=txt.charAt(0).toUpperCase()+txt.slice(1)
 
 if(!txt.endsWith(".")) txt+="."
@@ -236,7 +272,6 @@ document.getElementById(id).value=txt
 function section(id,title,desc){
 
 document.write(`
-
 <div class="section">
 
 <h3>${title}</h3>
@@ -251,7 +286,6 @@ document.write(`
 <textarea id="${id}"></textarea>
 
 </div>
-
 `)
 
 }
@@ -264,10 +298,10 @@ section("general","1 General & Procedures",
 "Accident procedures, inspections, coupling, chaining, backing, TDG")
 
 section("main","2 Main Driving",
-"Shifting ability, steering control, lane tracking, following distance")
+"Shifting ability, steering control, lane tracking")
 
 section("intersections","3 Intersections & RR Crossings",
-"Look Reach Listen, braking, gear control")
+"Look Reach Listen, braking and gear control")
 
 section("equipment","4 Equipment Operations",
 "Clutch, transmission, engine brake")
@@ -275,13 +309,7 @@ section("equipment","4 Equipment Operations",
 section("defensive","5 Defensive Driving",
 "Anticipating conflict, speed for conditions")
 
-</script>
-
-<!-- REMARKS -->
-
-<script>
-
-section("strengths","Strengths","Driver strengths observed")
+section("strengths","Strengths","Positive driver performance")
 
 section("weakness","Weakness","Areas needing improvement")
 
@@ -306,7 +334,7 @@ section("recommendations","Recommendations","Trainer recommendations")
 <label><input type="checkbox" value="Tandem Steer"> Tandem Steer</label><br>
 <label><input type="checkbox" value="Over Dimension"> Over Dimension</label><br>
 <label><input type="checkbox" value="Automatic"> Automatic</label><br>
-<label><input type="checkbox" value="Manual/Standard"> Manual/Standard</label>
+<label><input type="checkbox" value="Manual/Standard"> Manual / Standard</label>
 
 </div>
 
@@ -332,18 +360,16 @@ updateSummary()
 
 </script>
 
-<!-- NEXT EVAL -->
+<!-- NEXT EVALUATION -->
 
 <div class="section">
 
 <h3>Estimate Next Evaluation</h3>
 
 <select id="next_type" onchange="nextEvalToggle()">
-
 <option value="date">Date (+3 Months)</option>
 <option value="post">Post Incidents / As Required</option>
 <option value="na">N/A</option>
-
 </select>
 
 <input type="date" id="next_date">
@@ -389,7 +415,6 @@ section("notes","Notes","Additional notes")
 <div class="section">
 
 <h3>Conclusion Summary</h3>
-
 <div id="summary"></div>
 
 </div>
@@ -423,12 +448,10 @@ document.querySelectorAll("#approvalMenu input")
 <div class="section">
 
 <h3>Trainer Signature</h3>
-
 <canvas id="sig1"></canvas>
 <button onclick="pad1.clear()">Clear</button>
 
 <h3>Driver Signature</h3>
-
 <canvas id="sig2"></canvas>
 <button onclick="pad2.clear()">Clear</button>
 
@@ -446,12 +469,12 @@ function resize(){
 
 [canvas1,canvas2].forEach(c=>{
 
-let r=Math.max(window.devicePixelRatio||1,1)
+let ratio=Math.max(window.devicePixelRatio||1,1)
 
-c.width=c.offsetWidth*r
-c.height=c.offsetHeight*r
+c.width=c.offsetWidth*ratio
+c.height=c.offsetHeight*ratio
 
-c.getContext("2d").scale(r,r)
+c.getContext("2d").scale(ratio,ratio)
 
 })
 
@@ -462,16 +485,13 @@ resize()
 
 </script>
 
-<!-- SUBMIT -->
-
 <button onclick="submit()">Submit</button>
 
 <script>
 
 function submit(){
 
-let dl=
-document.getElementById("dl_class").value+
+let dl=document.getElementById("dl_class").value+
 document.getElementById("dl_end").value
 
 let nextType=document.getElementById("next_type").value
@@ -490,7 +510,6 @@ nextEval="N/A"
 }
 
 let approved=[]
-
 document.querySelectorAll("#approvalMenu input:checked")
 .forEach(x=>approved.push(x.value))
 
@@ -518,7 +537,6 @@ conclusion:conclusion,
 approved_for:approved.join(", "),
 
 next_evaluation:nextEval,
-
 notes:notes.value,
 
 sig_trainer:pad1.toDataURL(),
