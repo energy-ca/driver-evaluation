@@ -9,186 +9,106 @@
   @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;600;700&family=Barlow:wght@400;500;600&display=swap');
 
   :root {
-    --blue:    #33b5e5;
-    --green:   #00c853;
-    --red:     #ff4444;
-    --amber:   #ffbb33;
-    --dark:    #0e0e0e;
-    --card:    #1a1a1a;
-    --card2:   #222;
-    --border:  #333;
-    --muted:   #888;
-    --text:    #f0f0f0;
+    --blue:  #33b5e5;
+    --green: #00c853;
+    --red:   #ff4444;
+    --amber: #ffbb33;
+    --dark:  #0e0e0e;
+    --card:  #1a1a1a;
+    --card2: #222;
+    --border:#333;
+    --muted: #888;
+    --text:  #f0f0f0;
   }
-
   * { box-sizing: border-box; }
+  body { font-family:'Barlow',sans-serif; background:var(--dark); color:var(--text); margin:0; padding:12px 12px 60px; }
 
-  body {
-    font-family: 'Barlow', sans-serif;
-    background: var(--dark);
-    color: var(--text);
-    margin: 0;
-    padding: 12px 12px 60px;
-  }
+  #gate { position:fixed; inset:0; background:#000; display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:9999; gap:16px; }
+  #gate h2 { font-family:'Barlow Condensed',sans-serif; color:var(--blue); font-size:28px; letter-spacing:6px; margin:0; }
+  #gate input { font-size:44px; width:190px; text-align:center; background:#111; border:2px solid var(--blue); color:white; border-radius:12px; letter-spacing:10px; padding:10px; }
+  #gate p { color:var(--muted); font-size:13px; margin:0; }
 
-  /* ── PIN GATE ── */
-  #gate {
-    position: fixed; inset: 0;
-    background: #000;
-    display: flex; flex-direction: column;
-    justify-content: center; align-items: center;
-    z-index: 9999; gap: 16px;
-  }
-  #gate h2 { font-family: 'Barlow Condensed', sans-serif; color: var(--blue); font-size: 28px; letter-spacing: 6px; margin: 0; }
-  #gate input {
-    font-size: 44px; width: 190px; text-align: center;
-    background: #111; border: 2px solid var(--blue); color: white;
-    border-radius: 12px; letter-spacing: 10px; padding: 10px;
-  }
-  #gate p { color: var(--muted); font-size: 13px; margin: 0; }
+  .page-header { text-align:center; padding:18px 0 14px; border-bottom:1px solid var(--border); margin-bottom:18px; }
+  .page-header h1 { font-family:'Barlow Condensed',sans-serif; font-size:30px; font-weight:700; letter-spacing:3px; color:var(--blue); margin:0 0 4px; }
+  .page-header p { font-size:12px; color:var(--muted); margin:0; letter-spacing:2px; }
 
-  /* ── HEADER ── */
-  .page-header {
-    text-align: center; padding: 18px 0 14px;
-    border-bottom: 1px solid var(--border); margin-bottom: 18px;
-  }
-  .page-header h1 {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 30px; font-weight: 700; letter-spacing: 3px;
-    color: var(--blue); margin: 0 0 4px;
-  }
-  .page-header p { font-size: 12px; color: var(--muted); margin: 0; letter-spacing: 2px; }
+  .section { background:var(--card); border-radius:14px; margin-bottom:20px; border-top:3px solid var(--blue); overflow:hidden; }
+  .section-head { padding:14px 16px 0; }
+  .section-body { padding:0 16px 16px; }
+  .section h3 { font-family:'Barlow Condensed',sans-serif; font-size:17px; font-weight:700; color:var(--blue); letter-spacing:1.5px; margin:0 0 4px; text-transform:uppercase; }
+  .section-desc { font-size:11px; color:var(--muted); font-style:italic; margin:0 0 12px; line-height:1.4; }
 
-  /* ── SECTION CARD ── */
-  .section {
-    background: var(--card);
-    border-radius: 14px;
-    margin-bottom: 20px;
-    border-top: 3px solid var(--blue);
-    overflow: hidden;
-  }
-  .section-head { padding: 14px 16px 0; }
-  .section-body { padding: 0 16px 16px; }
-  .section h3 {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 17px; font-weight: 700;
-    color: var(--blue); letter-spacing: 1.5px;
-    margin: 0 0 4px; text-transform: uppercase;
-  }
-  .section-desc { font-size: 11px; color: var(--muted); font-style: italic; margin: 0 0 12px; line-height: 1.4; }
+  label.field-label { display:block; font-size:11px; font-weight:600; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin:10px 0 4px; }
+  input.fi, select.fi, textarea.fi { width:100%; background:var(--card2); color:var(--text); border:1px solid var(--border); border-radius:8px; padding:11px 13px; font-size:15px; font-family:'Barlow',sans-serif; appearance:none; }
+  select.fi { background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right 12px center; padding-right:34px; }
+  input.fi:focus, select.fi:focus, textarea.fi:focus { outline:none; border-color:var(--blue); }
 
-  /* header info fields */
-  label.field-label { display: block; font-size: 11px; font-weight: 600; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin: 10px 0 4px; }
-  input.fi, select.fi, textarea.fi {
-    width: 100%; background: var(--card2); color: var(--text);
-    border: 1px solid var(--border); border-radius: 8px;
-    padding: 11px 13px; font-size: 15px; font-family: 'Barlow', sans-serif;
-    appearance: none;
-  }
-  select.fi { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 34px; }
-  input.fi:focus, select.fi:focus, textarea.fi:focus { outline: none; border-color: var(--blue); }
+  .dl-row { display:flex; gap:10px; }
+  .dl-row select { flex:1; }
 
-  /* DL class row */
-  .dl-row { display: flex; gap: 10px; }
-  .dl-row select { flex: 1; }
+  .controls { display:flex; gap:8px; margin-bottom:10px; }
+  .btn { padding:12px 8px; border:none; border-radius:9px; font-weight:700; font-size:13px; cursor:pointer; font-family:'Barlow Condensed',sans-serif; letter-spacing:1px; transition:opacity .15s; }
+  .btn:active { opacity:.75; }
+  .btn-start { background:#1a2e1a; color:var(--green); border:1px solid var(--green); flex:1.2; }
+  .btn-stop  { background:#2e1a1a; color:var(--red);   border:1px solid var(--red);   flex:1.2; }
+  .btn-ai    { background:#0d1e2e; color:var(--blue);  border:1px solid var(--blue);  flex:1.5; }
 
-  /* ── VOICE CONTROLS ── */
-  .controls { display: flex; gap: 8px; margin-bottom: 10px; }
-  .btn {
-    padding: 12px 8px; border: none; border-radius: 9px;
-    font-weight: 700; font-size: 13px; cursor: pointer;
-    font-family: 'Barlow Condensed', sans-serif; letter-spacing: 1px;
-    transition: opacity .15s;
-  }
-  .btn:active { opacity: .75; }
-  .btn-start { background: #1a2e1a; color: var(--green); border: 1px solid var(--green); flex: 1.2; }
-  .btn-stop  { background: #2e1a1a; color: var(--red);   border: 1px solid var(--red);   flex: 1.2; }
-  .btn-ai    { background: #0d1e2e; color: var(--blue);  border: 1px solid var(--blue);  flex: 1.5; }
+  @keyframes recPulse { 0%{background:#2e1a1a;box-shadow:none;} 50%{background:#6a0000;box-shadow:0 0 10px #ff444466;} 100%{background:#2e1a1a;box-shadow:none;} }
+  .rec-active { animation:recPulse 1s infinite !important; color:#fff !important; }
+  .ai-loading { opacity:.6; pointer-events:none; }
 
-  @keyframes recPulse {
-    0%   { background: #2e1a1a; box-shadow: none; }
-    50%  { background: #6a0000; box-shadow: 0 0 10px #ff444466; }
-    100% { background: #2e1a1a; box-shadow: none; }
-  }
-  .rec-active { animation: recPulse 1s infinite !important; color: #fff !important; }
+  textarea.fi { min-height:100px; line-height:1.5; resize:vertical; }
+  textarea.input-active { border-color:var(--green) !important; }
 
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .ai-loading { opacity: .6; pointer-events: none; }
-  .ai-loading::after { content: ' ⟳'; display: inline-block; animation: spin .8s linear infinite; }
+  .section.amber { border-top-color:var(--amber); }
+  .section.amber h3 { color:var(--amber); }
 
-  textarea.fi { min-height: 100px; line-height: 1.5; resize: vertical; }
-  textarea.input-active { border-color: var(--green) !important; }
+  .conclusion-btns { display:flex; gap:10px; margin:4px 0 14px; }
+  .btn-approve { flex:1; padding:16px; background:#0d2e1a; color:var(--green); border:2px solid var(--green); border-radius:10px; font-family:'Barlow Condensed',sans-serif; font-size:18px; font-weight:700; cursor:pointer; letter-spacing:1px; transition:background .2s; }
+  .btn-approve.active { background:var(--green); color:#000; }
+  .btn-reject  { flex:1; padding:16px; background:#2e0d0d; color:var(--red);   border:2px solid var(--red);   border-radius:10px; font-family:'Barlow Condensed',sans-serif; font-size:18px; font-weight:700; cursor:pointer; letter-spacing:1px; transition:background .2s; }
+  .btn-reject.active  { background:var(--red);   color:#000; }
 
-  /* ── EVALUATION REMARKS ── */
-  .section.amber { border-top-color: var(--amber); }
-  .section.amber h3 { color: var(--amber); }
+  #approvedFor { display:none; background:var(--card2); border-radius:10px; padding:14px; margin-bottom:10px; }
+  #approvedFor p { font-size:12px; font-weight:700; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin:0 0 10px; }
+  .check-item { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); cursor:pointer; }
+  .check-item:last-child { border-bottom:none; }
+  .check-item input[type=checkbox] { width:20px; height:20px; accent-color:var(--green); cursor:pointer; }
+  .check-item label { font-size:15px; cursor:pointer; flex:1; }
 
-  /* ── CONCLUSION ── */
-  .conclusion-btns { display: flex; gap: 10px; margin: 4px 0 14px; }
-  .btn-approve { flex: 1; padding: 16px; background: #0d2e1a; color: var(--green); border: 2px solid var(--green); border-radius: 10px; font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 700; cursor: pointer; letter-spacing: 1px; transition: background .2s; }
-  .btn-approve.active { background: #00c853; color: #000; }
-  .btn-reject  { flex: 1; padding: 16px; background: #2e0d0d; color: var(--red);   border: 2px solid var(--red);   border-radius: 10px; font-family: 'Barlow Condensed', sans-serif; font-size: 18px; font-weight: 700; cursor: pointer; letter-spacing: 1px; transition: background .2s; }
-  .btn-reject.active  { background: #ff4444; color: #000; }
+  .eval-options { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
+  .eval-pill { padding:9px 16px; border-radius:20px; border:1px solid var(--border); background:var(--card2); color:var(--muted); font-size:13px; cursor:pointer; font-family:'Barlow',sans-serif; transition:all .2s; }
+  .eval-pill.active { border-color:var(--blue); color:var(--blue); background:#0d1e2e; }
 
-  #approvedFor { display: none; background: var(--card2); border-radius: 10px; padding: 14px; margin-bottom: 10px; }
-  #approvedFor p { font-size: 12px; font-weight: 700; color: var(--muted); letter-spacing: 1px; text-transform: uppercase; margin: 0 0 10px; }
-  .check-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px solid var(--border); cursor: pointer; }
-  .check-item:last-child { border-bottom: none; }
-  .check-item input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--green); cursor: pointer; }
-  .check-item label { font-size: 15px; cursor: pointer; flex: 1; }
+  #conclusionSummary { display:none; background:#0d1e0d; border:1px solid var(--green); border-radius:10px; padding:14px; margin-bottom:16px; }
+  #conclusionSummary.rejected { background:#1e0d0d; border-color:var(--red); }
+  #conclusionSummary h4 { font-family:'Barlow Condensed',sans-serif; font-size:16px; letter-spacing:1px; margin:0 0 6px; color:var(--green); text-transform:uppercase; }
+  #conclusionSummary.rejected h4 { color:var(--red); }
+  #conclusionSummary p { margin:3px 0; font-size:14px; color:#ccc; }
 
-  /* ── NEXT EVAL ── */
-  .eval-options { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
-  .eval-pill {
-    padding: 9px 16px; border-radius: 20px; border: 1px solid var(--border);
-    background: var(--card2); color: var(--muted); font-size: 13px;
-    cursor: pointer; font-family: 'Barlow', sans-serif; transition: all .2s;
-  }
-  .eval-pill.active { border-color: var(--blue); color: var(--blue); background: #0d1e2e; }
+  .sig-wrap { background:white; border-radius:10px; margin:6px 0 4px; }
+  canvas { width:100%; height:170px; touch-action:none; border-radius:10px; display:block; }
+  .sig-clear { background:none; border:none; color:var(--blue); font-size:13px; padding:4px 0 10px; cursor:pointer; }
 
-  /* ── CONCLUSION SUMMARY ── */
-  #conclusionSummary {
-    display: none; background: #0d1e0d;
-    border: 1px solid var(--green); border-radius: 10px;
-    padding: 14px; margin-bottom: 16px;
-  }
-  #conclusionSummary.rejected { background: #1e0d0d; border-color: var(--red); }
-  #conclusionSummary h4 { font-family: 'Barlow Condensed', sans-serif; font-size: 16px; letter-spacing: 1px; margin: 0 0 6px; color: var(--green); text-transform: uppercase; }
-  #conclusionSummary.rejected h4 { color: var(--red); }
-  #conclusionSummary p { margin: 3px 0; font-size: 14px; color: #ccc; }
-
-  /* ── SIGNATURES ── */
-  .sig-wrap { background: white; border-radius: 10px; margin: 6px 0 4px; }
-  canvas { width: 100%; height: 170px; touch-action: none; border-radius: 10px; display: block; }
-  .sig-clear { background: none; border: none; color: var(--blue); font-size: 13px; padding: 4px 0 10px; cursor: pointer; }
-
-  /* ── SUBMIT ── */
-  .submit-btn {
-    width: 100%; background: var(--green); color: #000;
-    border: none; padding: 20px; border-radius: 14px;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 22px; font-weight: 700; letter-spacing: 2px;
-    cursor: pointer; margin-top: 10px;
-  }
-  .submit-btn:active { opacity: .85; }
+  .submit-btn { width:100%; background:var(--green); color:#000; border:none; padding:20px; border-radius:14px; font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:700; letter-spacing:2px; cursor:pointer; margin-top:10px; }
+  .submit-btn:active { opacity:.85; }
 </style>
 </head>
 <body>
 
-<!-- ═══ PIN GATE ═══ -->
 <div id="gate">
   <h2>FLEET PIN</h2>
-  <input type="password" id="pin" maxlength="4" placeholder="••••" oninput="if(this.value==='2008') document.getElementById('gate').style.display='none'">
+  <input type="password" id="pin" maxlength="4" placeholder="••••"
+    oninput="if(this.value==='2008') document.getElementById('gate').style.display='none'">
   <p>Enter 4-digit fleet access code</p>
 </div>
 
-<!-- ═══ HEADER ═══ -->
 <div class="page-header">
   <h1>DRIVER TRAINING &amp; ASSESSMENT</h1>
   <p>FLEET SAFETY · AB OILFIELD OPERATIONS</p>
 </div>
 
-<!-- ═══ HEADER INFO ═══ -->
+<!-- INFO -->
 <div class="section" style="border-top-color:#555;">
   <div class="section-head"><h3>Assessment Info</h3></div>
   <div class="section-body">
@@ -201,11 +121,11 @@
     </select>
 
     <label class="field-label">Trainer</label>
-    <select id="trainer" class="fi">
+    <select id="trainer" class="fi" onchange="toggleTrainerOther(this)">
       <option selected>Dave Feaver</option>
       <option value="__other__">Other…</option>
     </select>
-    <input type="text" id="trainerOther" class="fi" placeholder="Trainer name" style="display:none; margin-top:8px;">
+    <input type="text" id="trainerOther" class="fi" placeholder="Enter trainer name" style="display:none;margin-top:8px;">
 
     <label class="field-label">Driver Name</label>
     <input type="text" id="driverName" class="fi" placeholder="Full Name">
@@ -213,22 +133,18 @@
     <label class="field-label">Date</label>
     <input type="date" id="evalDate" class="fi">
 
-    <!-- DL CLASS + COND/END -->
-    <label class="field-label">DL Class &amp; Conditions / Endorsements</label>
+    <label class="field-label">DL Class &amp; Endorsements (AB)</label>
     <div class="dl-row">
       <select id="dlClass" class="fi" onchange="updateEndOptions()">
         <option value="1">Class 1 — Tractor-Trailer</option>
-        <option value="2">Class 2 — Bus (25+ pass.)</option>
-        <option value="3">Class 3 — Heavy Truck (3+ axle)</option>
-        <option value="4">Class 4 — Taxi / Ambulance / Small Bus</option>
+        <option value="3">Class 3 — Heavy Truck</option>
         <option value="5">Class 5 — Standard Vehicle</option>
       </select>
-      <select id="dlEnd" class="fi">
-        <!-- populated by JS -->
-      </select>
+      <select id="dlEnd" class="fi"></select>
     </div>
-    <p style="font-size:11px;color:var(--muted);margin:5px 0 0;">
-      Note: Class 1 includes air brake (Q) by default — Q not printed on AB Class 1 licence.
+    <p style="font-size:11px;color:var(--muted);margin:5px 0 0;line-height:1.5;">
+      AB Class 1 includes air brake by law (Q not printed on licence).<br>
+      Class 3 &amp; 5: Q condition required for any air brake vehicle.
     </p>
 
     <label class="field-label">Unit #</label>
@@ -237,44 +153,41 @@
   </div>
 </div>
 
-<!-- ═══ SECTION FACTORY (called below) ═══ -->
-<!-- Sections 1-5 + Remarks + Notes are built by JS -->
-
 <div id="sections-container"></div>
 
-<!-- ═══ EVALUATION REMARKS ═══ -->
-<div class="section amber" id="sec-remarks">
+<!-- EVALUATION REMARKS -->
+<div class="section amber">
   <div class="section-head"><h3>Evaluation Remarks</h3></div>
   <div class="section-body">
 
     <label class="field-label">Strengths</label>
     <div class="controls">
       <button class="btn btn-start" onclick="voiceStart('strengths',this)">▶ START</button>
-      <button class="btn btn-stop"  onclick="voiceStop(this)">■ STOP</button>
+      <button class="btn btn-stop"  onclick="voiceStop()">■ STOP</button>
       <button class="btn btn-ai"    onclick="aiImprove('strengths','strengths')">✦ AI</button>
     </div>
-    <textarea id="strengths" class="fi"></textarea>
+    <textarea id="strengths" class="fi" placeholder="Driver strengths observed…"></textarea>
 
     <label class="field-label" style="margin-top:14px;">Weaknesses</label>
     <div class="controls">
       <button class="btn btn-start" onclick="voiceStart('weakness',this)">▶ START</button>
-      <button class="btn btn-stop"  onclick="voiceStop(this)">■ STOP</button>
+      <button class="btn btn-stop"  onclick="voiceStop()">■ STOP</button>
       <button class="btn btn-ai"    onclick="aiImprove('weakness','weaknesses')">✦ AI</button>
     </div>
-    <textarea id="weakness" class="fi"></textarea>
+    <textarea id="weakness" class="fi" placeholder="Areas requiring improvement…"></textarea>
 
     <label class="field-label" style="margin-top:14px;">Recommendations</label>
     <div class="controls">
       <button class="btn btn-start" onclick="voiceStart('recommendations',this)">▶ START</button>
-      <button class="btn btn-stop"  onclick="voiceStop(this)">■ STOP</button>
+      <button class="btn btn-stop"  onclick="voiceStop()">■ STOP</button>
       <button class="btn btn-ai"    onclick="aiImprove('recommendations','recommendations')">✦ AI</button>
     </div>
-    <textarea id="recommendations" class="fi"></textarea>
+    <textarea id="recommendations" class="fi" placeholder="Recommended actions or training…"></textarea>
 
   </div>
 </div>
 
-<!-- ═══ CONCLUSION ═══ -->
+<!-- CONCLUSION -->
 <div class="section" style="border-top-color:var(--amber);">
   <div class="section-head"><h3>Conclusion</h3></div>
   <div class="section-body">
@@ -282,7 +195,6 @@
       <button class="btn-approve" id="btnApprove" onclick="setConclusion('approved')">✔ APPROVED</button>
       <button class="btn-reject"  id="btnReject"  onclick="setConclusion('rejected')">✘ NOT APPROVED</button>
     </div>
-
     <div id="approvedFor">
       <p>Approved For:</p>
       <div class="check-item"><input type="checkbox" id="chk1" value="Tractor Trailer"><label for="chk1">Tractor Trailer</label></div>
@@ -295,29 +207,28 @@
   </div>
 </div>
 
-<!-- ═══ NEXT EVALUATION ═══ -->
+<!-- NEXT EVALUATION -->
 <div class="section" style="border-top-color:#555;">
   <div class="section-head"><h3>Estimate Next Evaluation</h3></div>
   <div class="section-body">
     <div class="eval-options">
-      <button class="eval-pill active" id="ep-date" onclick="setNextEval('date')">+3 Months</button>
-      <button class="eval-pill" id="ep-incident" onclick="setNextEval('incident')">Post Incident / As Required</button>
-      <button class="eval-pill" id="ep-na" onclick="setNextEval('na')">N/A</button>
+      <button class="eval-pill active" id="ep-date"     onclick="setNextEval('date')">+3 Months</button>
+      <button class="eval-pill"        id="ep-incident" onclick="setNextEval('incident')">Post Incident / As Required</button>
+      <button class="eval-pill"        id="ep-na"       onclick="setNextEval('na')">N/A</button>
     </div>
     <input type="date" id="nextEvalDate" class="fi">
   </div>
 </div>
 
-<!-- ═══ NOTES ═══ -->
 <div id="notes-container"></div>
 
-<!-- ═══ CONCLUSION SUMMARY (before sigs) ═══ -->
+<!-- CONCLUSION SUMMARY -->
 <div id="conclusionSummary">
   <h4 id="sumTitle">—</h4>
   <p id="sumDetail"></p>
 </div>
 
-<!-- ═══ SIGNATURES ═══ -->
+<!-- SIGNATURES -->
 <div class="section" style="border-top-color:#555;">
   <div class="section-head"><h3>Signatures</h3></div>
   <div class="section-body">
@@ -333,350 +244,218 @@
 
 <button class="submit-btn" onclick="submitForm()">SUBMIT ASSESSMENT</button>
 
-
-<!-- ═══════════════════════════════════════
-     JAVASCRIPT
-════════════════════════════════════════ -->
 <script>
-// ── Date defaults ──
+// Defaults
 document.getElementById('evalDate').valueAsDate = new Date();
-(function setNext3Mo() {
-  const d = new Date(); d.setMonth(d.getMonth() + 3);
-  document.getElementById('nextEvalDate').value = d.toISOString().split('T')[0];
-})();
+(function(){ const d=new Date(); d.setMonth(d.getMonth()+3); document.getElementById('nextEvalDate').value=d.toISOString().split('T')[0]; })();
 
-// ── Trainer "Other" toggle ──
-document.getElementById('trainer').addEventListener('change', function() {
-  document.getElementById('trainerOther').style.display = this.value === '__other__' ? 'block' : 'none';
-});
+function toggleTrainerOther(sel) {
+  document.getElementById('trainerOther').style.display = sel.value==='__other__' ? 'block' : 'none';
+}
 
-// ── DL class → endorsement options ──
+// ── DL: Class 1, 3, 5 ONLY ──
 const endMap = {
-  '1': [{ v:'',   l:'(Air Brake included by law)' }],
-  '2': [{ v:'',   l:'None' }, { v:'Q', l:'Q — Air Brake' }, { v:'S', l:'S — School Bus' }],
-  '3': [{ v:'',   l:'None' }, { v:'Q', l:'Q — Air Brake' }],
-  '4': [{ v:'',   l:'None' }, { v:'Q', l:'Q — Air Brake' }, { v:'S', l:'S — School Bus' }],
-  '5': [{ v:'',   l:'None' }, { v:'Q', l:'Q — Air Brake' }],
+  '1': [{ v:'',  l:'Air brake included by law' }],
+  '3': [{ v:'',  l:'None' }, { v:'Q', l:'Q — Air Brake' }],
+  '5': [{ v:'',  l:'None' }, { v:'Q', l:'Q — Air Brake' }],
 };
 function updateEndOptions() {
   const cls = document.getElementById('dlClass').value;
   const sel = document.getElementById('dlEnd');
   sel.innerHTML = '';
-  (endMap[cls] || []).forEach(o => {
+  (endMap[cls]||[]).forEach(o => {
     const opt = document.createElement('option');
-    opt.value = o.v; opt.textContent = o.l;
-    sel.appendChild(opt);
+    opt.value=o.v; opt.textContent=o.l; sel.appendChild(opt);
   });
 }
 updateEndOptions();
 
-// ── Section builder ──
+// ── Build sections ──
 const sectionDefs = [
-  { id:'txt1', num:'1', title:'General & Procedures',
-    desc:'Accident/Convoy procedures, congested areas, crane trucks, trailer brakes, pre-trip inspection.' },
-  { id:'txt2', num:'2', title:'Off-Road & Traction',
-    desc:'Diff lock/chains, SWP reviewed, soft shoulders, radio-controlled roads, lease access.' },
-  { id:'txt3', num:'3', title:'Vehicle Control',
-    desc:'Gears on hills, 3-point contact, clutch-brake, ditching procedures, Samsara review.' },
-  { id:'txt4', num:'4', title:'Maneuvers & Clearance',
-    desc:'Backing, obstacles, spotters, 360° checks, mirrors, tail swing, tight spaces.' },
-  { id:'txt5', num:'5', title:'Defensive Driving',
-    desc:'Scanning, anticipating conflict, speed for conditions, obeys signs, following distance.' },
+  { id:'txt1', num:'1', title:'General & Procedures',    desc:'Accident/convoy procedures, pre-trip inspection, congested areas, crane trucks, trailer brakes.' },
+  { id:'txt2', num:'2', title:'Off-Road & Traction',     desc:'Diff lock/chains, SWP reviewed, soft shoulders, radio-controlled roads, lease access.' },
+  { id:'txt3', num:'3', title:'Vehicle Control',         desc:'Gears on hills, 3-point contact, clutch-brake, ditching procedures, Samsara review.' },
+  { id:'txt4', num:'4', title:'Maneuvers & Clearance',   desc:'Backing, obstacles, spotters, 360° checks, mirrors, tail swing, tight spaces.' },
+  { id:'txt5', num:'5', title:'Defensive Driving',       desc:'Scanning, anticipating conflict, speed for conditions, obeys signs, following distance.' },
 ];
-
-function buildSections() {
-  const container = document.getElementById('sections-container');
-  sectionDefs.forEach(s => {
-    container.innerHTML += `
+(function(){
+  const c=document.getElementById('sections-container');
+  sectionDefs.forEach(s=>{
+    c.innerHTML+=`
     <div class="section">
-      <div class="section-head">
-        <h3>${s.num}. ${s.title}</h3>
-        <p class="section-desc">${s.desc}</p>
-      </div>
+      <div class="section-head"><h3>${s.num}. ${s.title}</h3><p class="section-desc">${s.desc}</p></div>
       <div class="section-body">
         <div class="controls">
           <button class="btn btn-start" onclick="voiceStart('${s.id}',this)">▶ START</button>
-          <button class="btn btn-stop"  onclick="voiceStop(this)">■ STOP</button>
+          <button class="btn btn-stop"  onclick="voiceStop()">■ STOP</button>
           <button class="btn btn-ai"    onclick="aiImprove('${s.id}','${s.title}')">✦ AI</button>
         </div>
         <textarea id="${s.id}" class="fi" placeholder="Speak or type observations…"></textarea>
       </div>
     </div>`;
   });
-}
-buildSections();
+})();
 
-// Notes section
-document.getElementById('notes-container').innerHTML = `
+document.getElementById('notes-container').innerHTML=`
   <div class="section" style="border-top-color:#555;">
     <div class="section-head"><h3>Notes</h3></div>
     <div class="section-body">
       <div class="controls">
         <button class="btn btn-start" onclick="voiceStart('notes',this)">▶ START</button>
-        <button class="btn btn-stop"  onclick="voiceStop(this)">■ STOP</button>
+        <button class="btn btn-stop"  onclick="voiceStop()">■ STOP</button>
         <button class="btn btn-ai"    onclick="aiImprove('notes','general notes')">✦ AI</button>
       </div>
       <textarea id="notes" class="fi" placeholder="Additional notes…"></textarea>
     </div>
   </div>`;
 
-// ═══════════════════════════════
-// VOICE ENGINE (robust auto-restart)
-// ═══════════════════════════════
-let recognition    = null;
-let activeArea     = null;
-let activeStopBtn  = null;
-let finalTranscript = '';
-let isRecording    = false;
-let restartTimer   = null;
+// ── VOICE ──
+let recognition=null, activeArea=null, activeStartBtn=null;
+let finalTranscript='', isRecording=false, restartTimer=null;
 
 function voiceStart(areaId, startBtn) {
   voiceStop();
-  activeArea    = document.getElementById(areaId);
-  activeStopBtn = startBtn.nextElementSibling; // STOP button
-  finalTranscript = activeArea.value;
-  isRecording   = true;
+  activeArea=document.getElementById(areaId);
+  activeStartBtn=startBtn;
+  finalTranscript=activeArea.value;
+  isRecording=true;
   startBtn.classList.add('rec-active');
   startSession();
 }
-
 function startSession() {
-  if (!isRecording) return;
-  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if (!SR) { alert('Speech recognition not supported. Use Chrome.'); return; }
-  recognition = new SR();
-  recognition.continuous      = true;
-  recognition.interimResults  = true;
-  recognition.lang            = 'en-US';
-  recognition.maxAlternatives = 1;
-
-  recognition.onresult = (event) => {
-    let interim = '';
-    for (let i = event.resultIndex; i < event.results.length; i++) {
-      const t = event.results[i][0].transcript;
-      if (event.results[i].isFinal) { finalTranscript += t + ' '; }
-      else { interim = t; }
+  if(!isRecording) return;
+  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  if(!SR){ alert('Speech recognition requires Chrome.'); return; }
+  recognition=new SR();
+  recognition.continuous=true; recognition.interimResults=true; recognition.lang='en-US';
+  recognition.onresult=(event)=>{
+    let interim='';
+    for(let i=event.resultIndex;i<event.results.length;i++){
+      const t=event.results[i][0].transcript;
+      if(event.results[i].isFinal) finalTranscript+=t+' ';
+      else interim=t;
     }
-    activeArea.value = finalTranscript + interim;
-    activeArea.scrollTop = activeArea.scrollHeight;
+    activeArea.value=finalTranscript+interim;
+    activeArea.scrollTop=activeArea.scrollHeight;
     activeArea.classList.add('input-active');
   };
-
-  recognition.onerror = (e) => {
-    console.log('Voice error:', e.error);
-    if (['network','audio-capture','no-speech'].includes(e.error)) scheduleRestart();
-  };
-
-  recognition.onend = () => {
-    if (isRecording) scheduleRestart();
-    else {
-      if (activeStopBtn) activeStopBtn.classList.remove('rec-active');
-      if (activeArea)    activeArea.classList.remove('input-active');
-    }
-  };
-
+  recognition.onerror=(e)=>{ if(['network','audio-capture','no-speech'].includes(e.error)) scheduleRestart(); };
+  recognition.onend=()=>{ if(isRecording) scheduleRestart(); else cleanup(); };
   recognition.start();
 }
+function scheduleRestart(){ clearTimeout(restartTimer); restartTimer=setTimeout(()=>{ if(isRecording) startSession(); },350); }
+function voiceStop(){ isRecording=false; clearTimeout(restartTimer); if(recognition){recognition.stop();recognition=null;} cleanup(); }
+function cleanup(){ document.querySelectorAll('.btn-start').forEach(b=>b.classList.remove('rec-active')); if(activeArea) activeArea.classList.remove('input-active'); }
 
-function scheduleRestart() {
-  clearTimeout(restartTimer);
-  restartTimer = setTimeout(() => { if (isRecording) startSession(); }, 350);
-}
-
-function voiceStop(stopBtn) {
-  isRecording = false;
-  clearTimeout(restartTimer);
-  if (recognition) { recognition.stop(); recognition = null; }
-  // Reset all START buttons
-  document.querySelectorAll('.btn-start').forEach(b => b.classList.remove('rec-active'));
-  if (activeArea) activeArea.classList.remove('input-active');
-}
-
-// ═══════════════════════════════
-// AI IMPROVE (Claude API)
-// ═══════════════════════════════
-const sectionPrompts = {
-  'General & Procedures':
-    'You are a professional fleet safety trainer writing an oilfield driver evaluation. Clean up the following notes for the "General & Procedures" section (accident/convoy procedures, pre-trip inspection, congested areas, crane trucks, trailer brakes). Fix grammar, punctuation and sentence structure. Keep the tone professional but direct. Do not add information not implied. Return only the corrected text.',
-  'Off-Road & Traction':
-    'You are a professional fleet safety trainer writing an oilfield driver evaluation. Clean up the following notes for the "Off-Road & Traction" section (differential lock, chains, soft shoulders, radio-controlled roads, SWP). Fix grammar and punctuation. Professional and direct tone. Return only the corrected text.',
-  'Vehicle Control':
-    'You are a professional fleet safety trainer writing an oilfield driver evaluation. Clean up the following notes for the "Vehicle Control" section (hill gears, clutch-brake, 3-point contact, ditching, Samsara). Fix grammar and punctuation. Professional and direct tone. Return only the corrected text.',
-  'Maneuvers & Clearance':
-    'You are a professional fleet safety trainer writing an oilfield driver evaluation. Clean up the following notes for the "Maneuvers & Clearance" section (backing, tail swing, spotters, mirrors, 360° checks). Fix grammar and punctuation. Professional and direct tone. Return only the corrected text.',
-  'Defensive Driving':
-    'You are a professional fleet safety trainer writing an oilfield driver evaluation. Clean up the following notes for the "Defensive Driving" section (scanning, anticipation, speed for conditions, following distance). Fix grammar and punctuation. Professional and direct tone. Return only the corrected text.',
-  'strengths':
-    'You are a professional fleet safety trainer writing an oilfield driver evaluation. Clean up and enhance the following STRENGTHS notes. Rewrite as clear, professional positive observations about the driver. Fix grammar and punctuation. Return only the corrected text.',
-  'weaknesses':
-    'You are a professional fleet safety trainer writing an oilfield driver evaluation. Clean up and enhance the following WEAKNESSES notes. Rewrite as clear, professional constructive observations. Fix grammar and punctuation. Return only the corrected text.',
-  'recommendations':
-    'You are a professional fleet safety trainer writing an oilfield driver evaluation. Clean up and enhance the following RECOMMENDATIONS. Rewrite as clear, actionable professional recommendations. Fix grammar and punctuation. Return only the corrected text.',
-  'general notes':
-    'You are a professional fleet safety trainer. Clean up the following general notes from a driver evaluation. Fix grammar and punctuation. Professional tone. Return only the corrected text.',
+// ── AI IMPROVE ──
+const aiPrompts = {
+  'General & Procedures': 'You are a professional oilfield fleet safety trainer writing a driver evaluation. Clean up these raw spoken notes for "General & Procedures" (accident/convoy procedures, pre-trip inspection, congested areas, crane trucks, trailer brakes). Fix grammar and punctuation. Professional, direct, concise. Do not add details. Return only the corrected text.',
+  'Off-Road & Traction':  'You are a professional oilfield fleet safety trainer. Clean up these raw notes for "Off-Road & Traction" (diff lock, chains, soft shoulders, radio roads, SWP). Fix grammar and punctuation. Professional and direct. Return only the corrected text.',
+  'Vehicle Control':      'You are a professional oilfield fleet safety trainer. Clean up these raw notes for "Vehicle Control" (hill gears, clutch-brake, 3-point contact, ditching, Samsara). Fix grammar and punctuation. Return only the corrected text.',
+  'Maneuvers & Clearance':'You are a professional oilfield fleet safety trainer. Clean up these raw notes for "Maneuvers & Clearance" (backing, tail swing, spotters, mirrors, 360° checks). Fix grammar and punctuation. Return only the corrected text.',
+  'Defensive Driving':    'You are a professional oilfield fleet safety trainer. Clean up these raw notes for "Defensive Driving" (scanning, speed for conditions, following distance, anticipation). Fix grammar and punctuation. Return only the corrected text.',
+  'strengths':            'You are a professional oilfield fleet safety trainer. Rewrite these as polished STRENGTHS observations. Fix grammar/punctuation. Professional tone. Return only the corrected text.',
+  'weaknesses':           'You are a professional oilfield fleet safety trainer. Rewrite these as polished WEAKNESSES/areas-for-improvement notes. Fix grammar/punctuation. Return only the corrected text.',
+  'recommendations':      'You are a professional oilfield fleet safety trainer. Rewrite these as clear, actionable RECOMMENDATIONS. Fix grammar/punctuation. Return only the corrected text.',
+  'general notes':        'You are a professional oilfield fleet safety trainer. Clean up these general evaluation notes. Fix grammar and punctuation. Professional tone. Return only the corrected text.',
 };
 
 async function aiImprove(areaId, sectionKey) {
-  const area = document.getElementById(areaId);
-  const raw  = area.value.trim();
-  if (!raw) { area.placeholder = 'Type or speak something first…'; return; }
-
-  // Find the AI button — it follows STOP in controls
-  const controls = area.closest('.section-body').querySelector('.controls');
-  const aiBtn    = controls ? controls.querySelector('.btn-ai') : null;
-  if (aiBtn) aiBtn.classList.add('ai-loading');
-
-  const systemPrompt = sectionPrompts[sectionKey] || sectionPrompts['general notes'];
-
+  const area=document.getElementById(areaId);
+  const raw=area.value.trim();
+  if(!raw){ area.placeholder='Add some text first, then press AI.'; return; }
+  const controls=area.previousElementSibling;
+  const aiBtn=controls?controls.querySelector('.btn-ai'):null;
+  if(aiBtn){ aiBtn.textContent='⟳ AI'; aiBtn.classList.add('ai-loading'); }
   try {
-    const resp = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 600,
-        system: systemPrompt,
-        messages: [{ role: 'user', content: raw }]
+    const resp=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({
+        model:'claude-sonnet-4-20250514', max_tokens:600,
+        system: aiPrompts[sectionKey]||aiPrompts['general notes'],
+        messages:[{role:'user',content:raw}]
       })
     });
-    const data = await resp.json();
-    const improved = data.content?.find(b => b.type === 'text')?.text || '';
-    if (improved) {
-      area.value = improved.trim();
-      finalTranscript = improved.trim();
-    }
-  } catch (err) {
-    console.error('AI error:', err);
-    alert('AI improvement failed. Check connection.');
-  } finally {
-    if (aiBtn) aiBtn.classList.remove('ai-loading');
-  }
+    const data=await resp.json();
+    const improved=data.content?.find(b=>b.type==='text')?.text?.trim()||'';
+    if(improved){ area.value=improved; finalTranscript=improved; }
+  } catch(err){ alert('AI improvement failed. Check connection.'); }
+  finally { if(aiBtn){ aiBtn.textContent='✦ AI'; aiBtn.classList.remove('ai-loading'); } }
 }
 
-// ═══════════════════════════════
-// CONCLUSION
-// ═══════════════════════════════
-let conclusionState = ''; // 'approved' | 'rejected'
-
-function setConclusion(val) {
-  conclusionState = val;
-  document.getElementById('btnApprove').classList.toggle('active', val === 'approved');
-  document.getElementById('btnReject').classList.toggle('active',  val === 'rejected');
-  document.getElementById('approvedFor').style.display = val === 'approved' ? 'block' : 'none';
-  updateConclusionSummary();
+// ── CONCLUSION ──
+let conclusionState='';
+function setConclusion(val){
+  conclusionState=val;
+  document.getElementById('btnApprove').classList.toggle('active',val==='approved');
+  document.getElementById('btnReject').classList.toggle('active',val==='rejected');
+  document.getElementById('approvedFor').style.display=val==='approved'?'block':'none';
+  updateSummary();
 }
-
-function getApprovedItems() {
-  return ['chk1','chk2','chk3','chk4','chk5','chk6']
-    .map(id => document.getElementById(id))
-    .filter(el => el.checked)
-    .map(el => el.value);
-}
-
-// update live whenever checkboxes change
-document.addEventListener('change', e => {
-  if (e.target.type === 'checkbox') updateConclusionSummary();
-});
-
-function updateConclusionSummary() {
-  const box = document.getElementById('conclusionSummary');
-  const title  = document.getElementById('sumTitle');
-  const detail = document.getElementById('sumDetail');
-
-  if (!conclusionState) { box.style.display = 'none'; return; }
-  box.style.display = 'block';
-
-  if (conclusionState === 'rejected') {
-    box.className = 'rejected';
-    title.textContent  = '✘ Not Approved';
-    detail.textContent = 'Driver did not meet evaluation criteria.';
+document.addEventListener('change',e=>{ if(e.target.type==='checkbox') updateSummary(); });
+function getChecked(){ return ['chk1','chk2','chk3','chk4','chk5','chk6'].map(id=>document.getElementById(id)).filter(el=>el.checked).map(el=>el.value); }
+function updateSummary(){
+  const box=document.getElementById('conclusionSummary');
+  if(!conclusionState){ box.style.display='none'; return; }
+  box.style.display='block';
+  if(conclusionState==='rejected'){
+    box.className='rejected';
+    document.getElementById('sumTitle').textContent='✘ Not Approved';
+    document.getElementById('sumDetail').textContent='Driver did not meet evaluation criteria.';
   } else {
-    box.className = '';
-    const items = getApprovedItems();
-    title.textContent  = '✔ Approved';
-    detail.textContent = items.length ? 'Approved for: ' + items.join(', ') : 'No specific categories selected.';
+    box.className='';
+    const items=getChecked();
+    document.getElementById('sumTitle').textContent='✔ Approved';
+    document.getElementById('sumDetail').textContent=items.length?'Approved for: '+items.join(', '):'No specific categories selected yet.';
   }
 }
 
-// ═══════════════════════════════
-// NEXT EVALUATION
-// ═══════════════════════════════
-function setNextEval(type) {
-  ['date','incident','na'].forEach(t => {
-    document.getElementById('ep-'+t).classList.toggle('active', t === type);
-  });
-  const dateField = document.getElementById('nextEvalDate');
-  dateField.style.display = type === 'date' ? 'block' : 'none';
+// ── NEXT EVAL ──
+function setNextEval(type){
+  ['date','incident','na'].forEach(t=>document.getElementById('ep-'+t).classList.toggle('active',t===type));
+  document.getElementById('nextEvalDate').style.display=type==='date'?'block':'none';
 }
-// init: show date field
 setNextEval('date');
 
-// ═══════════════════════════════
-// SIGNATURES
-// ═══════════════════════════════
-const canvas1 = document.getElementById('sig1');
-const canvas2 = document.getElementById('sig2');
-const pad1    = new SignaturePad(canvas1);
-const pad2    = new SignaturePad(canvas2);
-
-function resizeCanvas() {
-  [canvas1, canvas2].forEach(c => {
-    const ratio = Math.max(window.devicePixelRatio || 1, 1);
-    c.width  = c.offsetWidth  * ratio;
-    c.height = c.offsetHeight * ratio;
-    c.getContext('2d').scale(ratio, ratio);
-  });
+// ── SIGNATURES ──
+const canvas1=document.getElementById('sig1'), canvas2=document.getElementById('sig2');
+const pad1=new SignaturePad(canvas1), pad2=new SignaturePad(canvas2);
+function resizeCanvas(){
+  [canvas1,canvas2].forEach(c=>{ const r=Math.max(window.devicePixelRatio||1,1); c.width=c.offsetWidth*r; c.height=c.offsetHeight*r; c.getContext('2d').scale(r,r); });
 }
-window.addEventListener('resize', resizeCanvas);
-resizeCanvas();
+window.addEventListener('resize',resizeCanvas); resizeCanvas();
 
-// ═══════════════════════════════
-// SUBMIT
-// ═══════════════════════════════
-function collectFormData() {
-  const trainer = document.getElementById('trainer').value === '__other__'
-    ? document.getElementById('trainerOther').value
-    : document.getElementById('trainer').value;
-
-  const dlClass = document.getElementById('dlClass');
-  const dlEnd   = document.getElementById('dlEnd');
-  const dlLabel = dlClass.options[dlClass.selectedIndex].text
-    + (dlEnd.value ? ' + ' + dlEnd.value : '');
-
-  const nextPills = ['date','incident','na'];
-  const nextType  = nextPills.find(t => document.getElementById('ep-'+t).classList.contains('active')) || 'date';
-  const nextDate  = nextType === 'date' ? document.getElementById('nextEvalDate').value : nextType;
-
+// ── SUBMIT ──
+function collectFormData(){
+  const trainerSel=document.getElementById('trainer');
+  const trainer=trainerSel.value==='__other__'?document.getElementById('trainerOther').value:trainerSel.value;
+  const dlClass=document.getElementById('dlClass'), dlEnd=document.getElementById('dlEnd');
+  const dlLabel=dlClass.options[dlClass.selectedIndex].text+(dlEnd.value?' + '+dlEnd.value:'');
+  const nextType=['date','incident','na'].find(t=>document.getElementById('ep-'+t).classList.contains('active'))||'date';
+  const nextDate=nextType==='date'?document.getElementById('nextEvalDate').value:nextType;
   return {
-    division:        document.getElementById('division').value,
-    trainer,
-    driver:          document.getElementById('driverName').value,
-    date:            document.getElementById('evalDate').value,
-    dlClass:         dlLabel,
-    unit:            document.getElementById('unitNum').value,
-    txt1:            document.getElementById('txt1').value,
-    txt2:            document.getElementById('txt2').value,
-    txt3:            document.getElementById('txt3').value,
-    txt4:            document.getElementById('txt4').value,
-    txt5:            document.getElementById('txt5').value,
-    strengths:       document.getElementById('strengths').value,
-    weakness:        document.getElementById('weakness').value,
-    recommendations: document.getElementById('recommendations').value,
-    conclusion:      conclusionState === 'approved' ? ('Approved — ' + (getApprovedItems().join(', ') || 'General')) : 'Not Approved',
-    nextEval:        nextDate,
-    notes:           document.getElementById('notes').value,
-    sig1:            pad1.isEmpty() ? '' : pad1.toDataURL(),
-    sig2:            pad2.isEmpty() ? '' : pad2.toDataURL(),
+    division:document.getElementById('division').value, trainer,
+    driver:document.getElementById('driverName').value,
+    date:document.getElementById('evalDate').value,
+    dlClass:dlLabel, unit:document.getElementById('unitNum').value,
+    txt1:document.getElementById('txt1').value, txt2:document.getElementById('txt2').value,
+    txt3:document.getElementById('txt3').value, txt4:document.getElementById('txt4').value,
+    txt5:document.getElementById('txt5').value,
+    strengths:document.getElementById('strengths').value,
+    weakness:document.getElementById('weakness').value,
+    recommendations:document.getElementById('recommendations').value,
+    conclusion:conclusionState==='approved'?'Approved — '+(getChecked().join(', ')||'General'):'Not Approved',
+    nextEval:nextDate, notes:document.getElementById('notes').value,
+    sig1:pad1.isEmpty()?'':pad1.toDataURL(), sig2:pad2.isEmpty()?'':pad2.toDataURL(),
   };
 }
-
-function submitForm() {
-  const d = collectFormData();
-  if (!d.driver)      { alert('Please enter the driver name.'); return; }
-  if (!conclusionState) { alert('Please select Approved or Not Approved.'); return; }
-  // Phase 2: connect to Google Apps Script
-  console.log('Form data:', d);
-  alert('✔ Assessment captured!\n\nNext: Google Sheets + PDF pipeline will be wired here.');
+function submitForm(){
+  const d=collectFormData();
+  if(!d.driver){ alert('Please enter the driver name.'); return; }
+  if(!conclusionState){ alert('Please select Approved or Not Approved.'); return; }
+  console.log('Form data ready:', d);
+  alert('✔ Assessment captured!\nPhase 2: Google Sheets + PDF pipeline connects here.');
 }
 </script>
 </body>
