@@ -221,8 +221,8 @@
   <div class="section-body">
     <div class="eval-options">
       <button class="eval-pill active" id="ep-date"     onclick="setNextEval('date')">+3 Months</button>
-      <button class="eval-pill"        id="ep-incident" onclick="setNextEval('Post Incident/As Required')">Post Incident / As Required</button>
-      <button class="eval-pill"        id="ep-na"       onclick="setNextEval('N/A')">N/A</button>
+      <button class="eval-pill"        id="ep-incident" onclick="setNextEval('incident')">Post Incident / As Required</button>
+      <button class="eval-pill"        id="ep-na"       onclick="setNextEval('na')">N/A</button>
     </div>
     <input type="date" id="nextEvalDate" class="fi">
   </div>
@@ -480,7 +480,10 @@ function updateSummary(){
 
 // ── NEXT EVAL ──
 function setNextEval(type){
-  ['date','incident','na'].forEach(t => document.getElementById('ep-'+t).classList.toggle('active', t===type));
+  ['date','Post Incident/As Required','N/A'].forEach((t,i) => {
+    const ids = ['ep-date','ep-incident','ep-na'];
+    document.getElementById(ids[i]).classList.toggle('active', t===type);
+  });
   document.getElementById('nextEvalDate').style.display = type==='date' ? 'block' : 'none';
 }
 setNextEval('date');
@@ -500,8 +503,9 @@ function collectFormData(){
   const dlClass    = document.getElementById('dlClass');
   const dlEnd      = document.getElementById('dlEnd');
   const dlLabel    = dlClass.options[dlClass.selectedIndex].text + (dlEnd.value ? ' + ' + dlEnd.value : '');
-  const nextType   = ['date','incident','na'].find(t => document.getElementById('ep-'+t).classList.contains('active')) || 'date';
-  const nextDate   = nextType==='date' ? document.getElementById('nextEvalDate').value : nextType;
+  const epIds    = [{id:'ep-date',val:'date'},{id:'ep-incident',val:'Post Incident / As Required'},{id:'ep-na',val:'N/A'}];
+  const nextType = (epIds.find(e => document.getElementById(e.id).classList.contains('active')) || epIds[0]).val;
+  const nextDate = nextType==='date' ? document.getElementById('nextEvalDate').value : nextType;
   return {
     division:        document.getElementById('division').value,
     trainer,
