@@ -196,73 +196,63 @@ document.getElementById("date").valueAsDate=new Date()
 
 <script>
 
-let recognition
-let activeArea
-let stopBtn
-let finalTranscript=""
+let recognition;
+let activeArea;
+let activeStopBtn;
+let finalTranscript = "";
 
-function startRecognition(){
+function voiceStart(areaId, btn) {
 
-recognition=new (window.SpeechRecognition || window.webkitSpeechRecognition)()
+    if (recognition) recognition.stop();
 
-recognition.lang="en-US"
-recognition.continuous=true
-recognition.interimResults=true
+    activeArea = document.getElementById(areaId);
+    activeStopBtn = btn.nextElementSibling;
 
-recognition.onresult=function(event){
+    finalTranscript = activeArea.value;
 
-let interim=""
+    recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
 
-for(let i=event.resultIndex;i<event.results.length;i++){
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.lang = "en-US";   // More stable than en-CA in Chrome mobile
 
-let transcript=event.results[i][0].transcript
+    recognition.onstart = () => {
+        activeStopBtn.classList.add("rec-active");
+    };
 
-if(event.results[i].isFinal){
-finalTranscript+=transcript+" "
-}else{
-interim+=transcript
+    recognition.onresult = (event) => {
+
+        let interim = "";
+
+        for (let i = event.resultIndex; i < event.results.length; i++) {
+
+            let transcript = event.results[i][0].transcript;
+
+            if (event.results[i].isFinal) {
+                finalTranscript += transcript + ". ";
+            } else {
+                interim += transcript;
+            }
+
+        }
+
+        activeArea.value = finalTranscript + interim;
+    };
+
+    recognition.onerror = (event) => {
+        console.log("Speech error:", event.error);
+    };
+
+    recognition.onend = () => {
+        activeStopBtn.classList.remove("rec-active");
+    };
+
+    recognition.start();
 }
 
+function voiceStop() {
+    if (recognition) recognition.stop();
 }
-
-activeArea.value=finalTranscript+interim
-
-}
-
-recognition.onend=function(){
-if(activeArea){
-startRecognition()
-recognition.start()
-}
-}
-
-}
-
-function voiceStart(id,btn){
-
-activeArea=document.getElementById(id)
-stopBtn=btn.nextElementSibling
-
-finalTranscript=activeArea.value
-
-startRecognition()
-
-recognition.start()
-
-stopBtn.classList.add("rec-active")
-
-}
-
-function voiceStop(){
-
-if(recognition){
-recognition.stop()
-}
-
-stopBtn.classList.remove("rec-active")
-
-}
-
 </script>
 
 <!-- IMPROVE -->
