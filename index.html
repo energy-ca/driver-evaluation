@@ -193,65 +193,106 @@ document.getElementById("date").valueAsDate=new Date()
 </script>
 
 <!-- VOICE ENGINE -->
-
 <script>
 
-let recognition;
-let activeArea;
-let activeStopBtn;
+let recognition = null;
+let activeArea = null;
+let activeBtn = null;
 let finalTranscript = "";
+let restartTimer = null;
+let isRecording = false;
 
-function voiceStart(areaId, btn) {
-
-    if (recognition) recognition.stop();
+function voiceStart(areaId, startBtn) {
+    // Stop any existing session first
+    voiceStop();
 
     activeArea = document.getElementById(areaId);
-    activeStopBtn = btn.nextElementSibling;
-
+    activeBtn = startBtn.nextElementSibling; // the STOP button
     finalTranscript = activeArea.value;
+    isRecording = true;
 
-    recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+    startBtn.classList.add("rec-active");
+    startBtn.textContent = "● REC";
 
+    startSession();
+}
+
+function startSession() {
+    if (!isRecording) return;
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        alert("Speech recognition not supported in this browser. Try Chrome.");
+        return;
+    }
+
+    recognition = new SpeechRecognition();
     recognition.continuous = true;
     recognition.interimResults = true;
-    recognition.lang = "en-US";   // More stable than en-CA in Chrome mobile
-
-    recognition.onstart = () => {
-        activeStopBtn.classList.add("rec-active");
-    };
+    recognition.lang = "en-US";
+    recognition.maxAlternatives = 1;
 
     recognition.onresult = (event) => {
-
         let interim = "";
-
         for (let i = event.resultIndex; i < event.results.length; i++) {
-
-            let transcript = event.results[i][0].transcript;
-
+            const transcript = event.results[i][0].transcript;
             if (event.results[i].isFinal) {
-                finalTranscript += transcript + ". ";
+                finalTranscript += transcript + " ";
             } else {
-                interim += transcript;
+                interim = transcript;
             }
-
         }
-
         activeArea.value = finalTranscript + interim;
+        // Auto-scroll to bottom
+        activeArea.scrollTop = activeArea.scrollHeight;
     };
 
     recognition.onerror = (event) => {
         console.log("Speech error:", event.error);
+        // network/audio errors — auto-restart
+        if (event.error === "network" || event.error === "audio-capture") {
+            scheduleRestart();
+        }
+        // no-speech timeout — auto-restart silently
+        if (event.error === "no-speech") {
+            scheduleRestart();
+        }
+        // aborted intentionally — do nothing
     };
 
     recognition.onend = () => {
-        activeStopBtn.classList.remove("rec-active");
+        // If we're still supposed to be recording, restart automatically
+        if (isRecording) {
+            scheduleRestart();
+        }
     };
 
     recognition.start();
 }
 
+function scheduleRestart() {
+    if (!isRecording) return;
+    clearTimeout(restartTimer);
+    // Short delay prevents a rapid restart loop on mobile
+    restartTimer = setTimeout(() => {
+        if (isRecording) startSession();
+    }, 300);
+}
+
 function voiceStop() {
-    if (recognition) recognition.stop();
+    isRecording = false;
+    clearTimeout(restartTimer);
+
+    if (recognition) {
+        recognition.stop();
+        recognition = null;
+    }
+
+    // Reset all START buttons
+    document.querySelectorAll(".start").forEach(btn => {
+        btn.classList.remove("rec-active");
+        btn.textContent = "START";
+    });
 }
 </script>
 
