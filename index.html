@@ -526,6 +526,7 @@ function collectFormData(){
 }
 
 // ── SUBMIT ──
+// Uses POST so large signature images don't blow up the URL length limit
 async function submitForm(){
   const d   = collectFormData();
   const btn = document.getElementById('submitBtn');
@@ -537,8 +538,11 @@ async function submitForm(){
   btn.disabled    = true;
 
   try {
-    const url  = APPS_SCRIPT_URL + '?action=submitForm&data=' + encodeURIComponent(JSON.stringify(d));
-    const resp = await fetch(url);
+    const resp = await fetch(APPS_SCRIPT_URL, {
+      method:  'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body:    JSON.stringify({ action: 'submitForm', data: d })
+    });
     if (!resp.ok) throw new Error('HTTP ' + resp.status);
     const result = await resp.json();
     if (result.error) throw new Error(result.error);
