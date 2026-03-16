@@ -417,11 +417,12 @@ async function aiImprove(areaId, sectionKey) {
   if (aiBtn) { aiBtn.textContent = '⟳ AI'; aiBtn.classList.add('ai-loading'); }
 
   try {
-    const resp = await fetch(APPS_SCRIPT_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'text/plain' },
-      body: JSON.stringify({ action: 'improveText', section: sectionKey, text: raw })
-    });
+    // GET with URL params avoids CORS preflight — Apps Script handles this natively
+    const url = APPS_SCRIPT_URL
+      + '?action=improveText'
+      + '&section=' + encodeURIComponent(sectionKey)
+      + '&text='    + encodeURIComponent(raw);
+    const resp = await fetch(url);
     const data = await resp.json();
     if (data.error) throw new Error(data.error);
     const improved = (data.result || '').trim();
