@@ -60,37 +60,16 @@
   textarea.fi { min-height:100px; line-height:1.5; resize:vertical; }
   textarea.input-active { border-color:var(--green) !important; }
 
-  /* ── AI PREVIEW PANEL ── */
-  .ai-preview {
-    display: none;
-    margin-top: 10px;
-    background: #0a1a2a;
-    border: 1px solid var(--blue);
-    border-radius: 10px;
-    overflow: hidden;
-    animation: fadeIn .2s ease;
-  }
-  @keyframes fadeIn { from { opacity:0; transform:translateY(-4px); } to { opacity:1; transform:translateY(0); } }
-  .ai-preview-header {
-    display: flex; align-items: center; justify-content: space-between;
-    padding: 8px 12px;
-    background: #0d2040;
-    border-bottom: 1px solid #1a3a5a;
-  }
-  .ai-preview-header span { font-size: 11px; font-weight: 700; color: var(--blue); letter-spacing: 1.5px; text-transform: uppercase; }
-  .ai-preview-text {
-    padding: 12px;
-    font-size: 14px;
-    line-height: 1.6;
-    color: #d0e8f8;
-    white-space: pre-wrap;
-    word-break: break-word;
-  }
-  .ai-preview-actions { display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid #1a3a5a; }
+  .ai-preview { display:none; margin-top:10px; background:#0a1a2a; border:1px solid var(--blue); border-radius:10px; overflow:hidden; animation:fadeIn .2s ease; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);} }
+  .ai-preview-header { display:flex; align-items:center; justify-content:space-between; padding:8px 12px; background:#0d2040; border-bottom:1px solid #1a3a5a; }
+  .ai-preview-header span { font-size:11px; font-weight:700; color:var(--blue); letter-spacing:1.5px; text-transform:uppercase; }
+  .ai-preview-text { padding:12px; font-size:14px; line-height:1.6; color:#d0e8f8; white-space:pre-wrap; word-break:break-word; }
+  .ai-preview-actions { display:flex; gap:8px; padding:10px 12px; border-top:1px solid #1a3a5a; }
   .btn-accept  { flex:1; padding:11px; background:#0d2e1a; color:var(--green); border:1px solid var(--green); border-radius:8px; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:14px; cursor:pointer; letter-spacing:1px; }
-  .btn-accept:active  { background: var(--green); color:#000; }
-  .btn-discard { flex:1; padding:11px; background:#2e1a1a; color:var(--red);   border:1px solid var(--red);   border-radius:8px; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:14px; cursor:pointer; letter-spacing:1px; }
-  .btn-discard:active { background: var(--red); color:#000; }
+  .btn-accept:active { background:var(--green); color:#000; }
+  .btn-discard { flex:1; padding:11px; background:#2e1a1a; color:var(--red); border:1px solid var(--red); border-radius:8px; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:14px; cursor:pointer; letter-spacing:1px; }
+  .btn-discard:active { background:var(--red); color:#000; }
 
   .section.amber { border-top-color:var(--amber); }
   .section.amber h3 { color:var(--amber); }
@@ -98,8 +77,8 @@
   .conclusion-btns { display:flex; gap:10px; margin:4px 0 14px; }
   .btn-approve { flex:1; padding:16px; background:#0d2e1a; color:var(--green); border:2px solid var(--green); border-radius:10px; font-family:'Barlow Condensed',sans-serif; font-size:18px; font-weight:700; cursor:pointer; letter-spacing:1px; transition:background .2s; }
   .btn-approve.active { background:var(--green); color:#000; }
-  .btn-reject  { flex:1; padding:16px; background:#2e0d0d; color:var(--red);   border:2px solid var(--red);   border-radius:10px; font-family:'Barlow Condensed',sans-serif; font-size:18px; font-weight:700; cursor:pointer; letter-spacing:1px; transition:background .2s; }
-  .btn-reject.active  { background:var(--red);   color:#000; }
+  .btn-reject  { flex:1; padding:16px; background:#2e0d0d; color:var(--red); border:2px solid var(--red); border-radius:10px; font-family:'Barlow Condensed',sans-serif; font-size:18px; font-weight:700; cursor:pointer; letter-spacing:1px; transition:background .2s; }
+  .btn-reject.active { background:var(--red); color:#000; }
 
   #approvedFor { display:none; background:var(--card2); border-radius:10px; padding:14px; margin-bottom:10px; }
   #approvedFor p { font-size:12px; font-weight:700; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin:0 0 10px; }
@@ -122,8 +101,9 @@
   canvas { width:100%; height:170px; touch-action:none; border-radius:10px; display:block; }
   .sig-clear { background:none; border:none; color:var(--blue); font-size:13px; padding:4px 0 10px; cursor:pointer; }
 
-  .submit-btn { width:100%; background:var(--green); color:#000; border:none; padding:20px; border-radius:14px; font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:700; letter-spacing:2px; cursor:pointer; margin-top:10px; }
+  .submit-btn { width:100%; background:var(--green); color:#000; border:none; padding:20px; border-radius:14px; font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:700; letter-spacing:2px; cursor:pointer; margin-top:10px; transition:opacity .2s; }
   .submit-btn:active { opacity:.85; }
+  .submit-btn:disabled { opacity:.6; cursor:not-allowed; }
 </style>
 </head>
 <body>
@@ -174,7 +154,7 @@
       </select>
       <select id="dlEnd" class="fi"></select>
     </div>
-  
+
     <label class="field-label">Unit #</label>
     <input type="text" id="unitNum" class="fi" placeholder="Truck / Unit ID">
 
@@ -270,10 +250,10 @@
   </div>
 </div>
 
-<button class="submit-btn" onclick="submitForm()">SUBMIT ASSESSMENT</button>
+<button class="submit-btn" id="submitBtn" onclick="submitForm()">SUBMIT ASSESSMENT</button>
 
 <script>
-// Defaults
+// ── Defaults ──
 document.getElementById('evalDate').valueAsDate = new Date();
 (function(){ const d=new Date(); d.setMonth(d.getMonth()+3); document.getElementById('nextEvalDate').value=d.toISOString().split('T')[0]; })();
 
@@ -281,7 +261,7 @@ function toggleTrainerOther(sel) {
   document.getElementById('trainerOther').style.display = sel.value==='__other__' ? 'block' : 'none';
 }
 
-// ── DL: Class 1, 3, 5 ONLY ──
+// ── DL Class ──
 const endMap = {
   '1': [{ v:'',  l:'Air brake included by law' }],
   '3': [{ v:'',  l:'None' }, { v:'Q', l:'Q — Air Brake' }],
@@ -300,18 +280,23 @@ updateEndOptions();
 
 // ── Build sections ──
 const sectionDefs = [
-  { id:'txt1', num:'1', title:'1. General & Procedures',    desc:'Accident/Convoy Procedures, Congested Areas, Pre-Trip and Post-Trip Inspections, En-Route Inspections, Coupling and Uncoupling, Chaining Up, Backing, Off-Road Driving, TDG.' },
-  { id:'txt2', num:'2', title:'2. Main Driving',     desc:'Shifting Ability, Steering Control, Lane Control and Tracking, Signaling, Speed Control, Eye Movement / Vision, Following Distances.' },
-  { id:'txt3', num:'3', title:'3. Intersections and R.R-Crossings',         desc:'Steering Control, Lane Control and Tracking, Signaling, Gear(s), Eye Movement / Vision, LRL (Left, Right, Left), Braking and Stopping.' },
-  { id:'txt4', num:'4', title:'4. Equipment Operations',   desc:'Clutch, Transmission, Engine, Engine Brake, Proper Braking Techniques.' },
-  { id:'txt5', num:'5', title:'5. Defensive Driving',       desc:'Anticipating Conflict, Speed for Conditions, Getting the Big Picture.' },
+  { id:'txt1', title:'1. General & Procedures',
+    desc:'Accident/Convoy Procedures, Congested Areas, Pre-Trip and Post-Trip Inspections, En-Route Inspections, Coupling and Uncoupling, Chaining Up, Backing, Off-Road Driving, TDG.' },
+  { id:'txt2', title:'2. Main Driving',
+    desc:'Shifting Ability, Steering Control, Lane Control and Tracking, Signaling, Speed Control, Eye Movement / Vision, Following Distances.' },
+  { id:'txt3', title:'3. Intersections and R.R. Crossings',
+    desc:'Steering Control, Lane Control and Tracking, Signaling, Gear(s), Eye Movement / Vision, LRL (Left, Right, Left), Braking and Stopping.' },
+  { id:'txt4', title:'4. Equipment Operations',
+    desc:'Clutch, Transmission, Engine, Engine Brake, Proper Braking Techniques.' },
+  { id:'txt5', title:'5. Defensive Driving',
+    desc:'Anticipating Conflict, Speed for Conditions, Getting the Big Picture.' },
 ];
 (function(){
-  const c=document.getElementById('sections-container');
-  sectionDefs.forEach(s=>{
-    c.innerHTML+=`
+  const c = document.getElementById('sections-container');
+  sectionDefs.forEach(s => {
+    c.innerHTML += `
     <div class="section">
-      <div class="section-head"><h3>${s.num}. ${s.title}</h3><p class="section-desc">${s.desc}</p></div>
+      <div class="section-head"><h3>${s.title}</h3><p class="section-desc">${s.desc}</p></div>
       <div class="section-body">
         <div class="controls">
           <button class="btn btn-start" onclick="voiceStart('${s.id}',this)">▶ START</button>
@@ -324,7 +309,7 @@ const sectionDefs = [
   });
 })();
 
-document.getElementById('notes-container').innerHTML=`
+document.getElementById('notes-container').innerHTML = `
   <div class="section" style="border-top-color:#555;">
     <div class="section-head"><h3>Notes</h3></div>
     <div class="section-body">
@@ -338,53 +323,53 @@ document.getElementById('notes-container').innerHTML=`
   </div>`;
 
 // ── VOICE ──
-let recognition=null, activeArea=null, activeStartBtn=null;
+let recognition=null, activeArea=null;
 let finalTranscript='', isRecording=false, restartTimer=null;
 
 function voiceStart(areaId, startBtn) {
   voiceStop();
-  activeArea=document.getElementById(areaId);
-  activeStartBtn=startBtn;
-  finalTranscript=activeArea.value;
-  isRecording=true;
+  activeArea = document.getElementById(areaId);
+  finalTranscript = activeArea.value;
+  isRecording = true;
   startBtn.classList.add('rec-active');
   startSession();
 }
 function startSession() {
   if(!isRecording) return;
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
   if(!SR){ alert('Speech recognition requires Chrome.'); return; }
-  recognition=new SR();
-  recognition.continuous=true; recognition.interimResults=true; recognition.lang='en-US';
-  recognition.onresult=(event)=>{
-    let interim='';
-    for(let i=event.resultIndex;i<event.results.length;i++){
-      const t=event.results[i][0].transcript;
-      if(event.results[i].isFinal) finalTranscript+=t+' ';
-      else interim=t;
+  recognition = new SR();
+  recognition.continuous = true;
+  recognition.interimResults = true;
+  recognition.lang = 'en-US';
+  recognition.onresult = (event) => {
+    let interim = '';
+    for(let i=event.resultIndex; i<event.results.length; i++){
+      const t = event.results[i][0].transcript;
+      if(event.results[i].isFinal) finalTranscript += t + ' ';
+      else interim = t;
     }
-    activeArea.value=finalTranscript+interim;
-    activeArea.scrollTop=activeArea.scrollHeight;
+    activeArea.value = finalTranscript + interim;
+    activeArea.scrollTop = activeArea.scrollHeight;
     activeArea.classList.add('input-active');
   };
-  recognition.onerror=(e)=>{ if(['network','audio-capture','no-speech'].includes(e.error)) scheduleRestart(); };
-  recognition.onend=()=>{ if(isRecording) scheduleRestart(); else cleanup(); };
+  recognition.onerror = (e) => { if(['network','audio-capture','no-speech'].includes(e.error)) scheduleRestart(); };
+  recognition.onend = () => { if(isRecording) scheduleRestart(); else cleanup(); };
   recognition.start();
 }
 function scheduleRestart(){ clearTimeout(restartTimer); restartTimer=setTimeout(()=>{ if(isRecording) startSession(); },350); }
 function voiceStop(){ isRecording=false; clearTimeout(restartTimer); if(recognition){recognition.stop();recognition=null;} cleanup(); }
 function cleanup(){ document.querySelectorAll('.btn-start').forEach(b=>b.classList.remove('rec-active')); if(activeArea) activeArea.classList.remove('input-active'); }
 
-// ── AI IMPROVE (routed through Apps Script — key never exposed in browser) ──
-// TODO: paste your deployed Apps Script Web App URL here after deployment
+// ── APPS SCRIPT URL ──
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyu6mbuoc2io8SxulkpZmJRfT4eOb-qlRa7kettDYkmn27CN3t7oSoFlc0ItEytoAcfTQ/exec';
 
+// ── AI IMPROVE ──
 async function aiImprove(areaId, sectionKey) {
   const area = document.getElementById(areaId);
   const raw  = area.value.trim();
   if (!raw) { area.placeholder = 'Add some text first, then press ✦ AI.'; return; }
 
-  // Find or create the preview panel right after the textarea
   let preview = area.nextElementSibling;
   if (!preview || !preview.classList.contains('ai-preview')) {
     preview = document.createElement('div');
@@ -406,26 +391,24 @@ async function aiImprove(areaId, sectionKey) {
   const controls    = area.previousElementSibling;
   const aiBtn       = controls ? controls.querySelector('.btn-ai') : null;
 
-  // Show loading state
   preview.style.display = 'block';
   previewText.textContent = 'Improving your text…';
   previewText.style.color = 'var(--muted)';
   if (aiBtn) { aiBtn.textContent = '⟳ AI'; aiBtn.classList.add('ai-loading'); }
 
   try {
-    // GET with URL params avoids CORS preflight — Apps Script handles this natively
     const url = APPS_SCRIPT_URL
       + '?action=improveText'
       + '&section=' + encodeURIComponent(sectionKey)
       + '&text='    + encodeURIComponent(raw);
     const resp = await fetch(url);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
     const data = await resp.json();
     if (data.error) throw new Error(data.error);
     const improved = (data.result || '').trim();
     if (improved) {
       previewText.textContent = improved;
       previewText.style.color = '#d0e8f8';
-      // Store the improved text on the preview so Accept can retrieve it
       preview.dataset.improved = improved;
       preview.dataset.areaId   = areaId;
     } else {
@@ -433,7 +416,7 @@ async function aiImprove(areaId, sectionKey) {
     }
   } catch (err) {
     console.error('AI error:', err);
-    previewText.textContent = '⚠ AI improvement failed. Check that APPS_SCRIPT_URL is set and deployed as a public Web App.';
+    previewText.textContent = '⚠ ' + err.message;
     previewText.style.color = 'var(--red)';
     preview.dataset.improved = '';
   } finally {
@@ -448,8 +431,7 @@ function acceptAI(btn) {
   if (areaId && improved) {
     const area = document.getElementById(areaId);
     area.value = improved;
-    finalTranscript = improved;  // keep voice engine in sync
-    // Flash green border to confirm
+    finalTranscript = improved;
     area.style.borderColor = 'var(--green)';
     setTimeout(() => { area.style.borderColor = ''; }, 800);
   }
@@ -461,77 +443,107 @@ function discardAI(btn) {
 }
 
 // ── CONCLUSION ──
-let conclusionState='';
+let conclusionState = '';
 function setConclusion(val){
-  conclusionState=val;
-  document.getElementById('btnApprove').classList.toggle('active',val==='approved');
-  document.getElementById('btnReject').classList.toggle('active',val==='rejected');
-  document.getElementById('approvedFor').style.display=val==='approved'?'block':'none';
+  conclusionState = val;
+  document.getElementById('btnApprove').classList.toggle('active', val==='approved');
+  document.getElementById('btnReject').classList.toggle('active',  val==='rejected');
+  document.getElementById('approvedFor').style.display = val==='approved' ? 'block' : 'none';
   updateSummary();
 }
-document.addEventListener('change',e=>{ if(e.target.type==='checkbox') updateSummary(); });
+document.addEventListener('change', e => { if(e.target.type==='checkbox') updateSummary(); });
 function getChecked(){ return ['chk1','chk2','chk3','chk4','chk5','chk6'].map(id=>document.getElementById(id)).filter(el=>el.checked).map(el=>el.value); }
 function updateSummary(){
-  const box=document.getElementById('conclusionSummary');
+  const box = document.getElementById('conclusionSummary');
   if(!conclusionState){ box.style.display='none'; return; }
-  box.style.display='block';
+  box.style.display = 'block';
   if(conclusionState==='rejected'){
-    box.className='rejected';
-    document.getElementById('sumTitle').textContent='✘ Not Approved';
-    document.getElementById('sumDetail').textContent='Driver did not meet evaluation criteria.';
+    box.className = 'rejected';
+    document.getElementById('sumTitle').textContent  = '✘ Not Approved';
+    document.getElementById('sumDetail').textContent = 'Driver did not meet evaluation criteria.';
   } else {
-    box.className='';
-    const items=getChecked();
-    document.getElementById('sumTitle').textContent='✔ Approved';
-    document.getElementById('sumDetail').textContent=items.length?'Approved for: '+items.join(', '):'No specific categories selected yet.';
+    box.className = '';
+    const items = getChecked();
+    document.getElementById('sumTitle').textContent  = '✔ Approved';
+    document.getElementById('sumDetail').textContent = items.length ? 'Approved for: '+items.join(', ') : 'No specific categories selected yet.';
   }
 }
 
 // ── NEXT EVAL ──
 function setNextEval(type){
-  ['date','incident','na'].forEach(t=>document.getElementById('ep-'+t).classList.toggle('active',t===type));
-  document.getElementById('nextEvalDate').style.display=type==='date'?'block':'none';
+  ['date','incident','na'].forEach(t => document.getElementById('ep-'+t).classList.toggle('active', t===type));
+  document.getElementById('nextEvalDate').style.display = type==='date' ? 'block' : 'none';
 }
 setNextEval('date');
 
 // ── SIGNATURES ──
-const canvas1=document.getElementById('sig1'), canvas2=document.getElementById('sig2');
-const pad1=new SignaturePad(canvas1), pad2=new SignaturePad(canvas2);
+const canvas1 = document.getElementById('sig1'), canvas2 = document.getElementById('sig2');
+const pad1 = new SignaturePad(canvas1), pad2 = new SignaturePad(canvas2);
 function resizeCanvas(){
   [canvas1,canvas2].forEach(c=>{ const r=Math.max(window.devicePixelRatio||1,1); c.width=c.offsetWidth*r; c.height=c.offsetHeight*r; c.getContext('2d').scale(r,r); });
 }
-window.addEventListener('resize',resizeCanvas); resizeCanvas();
+window.addEventListener('resize', resizeCanvas); resizeCanvas();
 
-// ── SUBMIT ──
+// ── COLLECT DATA ──
 function collectFormData(){
-  const trainerSel=document.getElementById('trainer');
-  const trainer=trainerSel.value==='__other__'?document.getElementById('trainerOther').value:trainerSel.value;
-  const dlClass=document.getElementById('dlClass'), dlEnd=document.getElementById('dlEnd');
-  const dlLabel=dlClass.options[dlClass.selectedIndex].text+(dlEnd.value?' + '+dlEnd.value:'');
-  const nextType=['date','incident','na'].find(t=>document.getElementById('ep-'+t).classList.contains('active'))||'date';
-  const nextDate=nextType==='date'?document.getElementById('nextEvalDate').value:nextType;
+  const trainerSel = document.getElementById('trainer');
+  const trainer    = trainerSel.value==='__other__' ? document.getElementById('trainerOther').value : trainerSel.value;
+  const dlClass    = document.getElementById('dlClass');
+  const dlEnd      = document.getElementById('dlEnd');
+  const dlLabel    = dlClass.options[dlClass.selectedIndex].text + (dlEnd.value ? ' + ' + dlEnd.value : '');
+  const nextType   = ['date','incident','na'].find(t => document.getElementById('ep-'+t).classList.contains('active')) || 'date';
+  const nextDate   = nextType==='date' ? document.getElementById('nextEvalDate').value : nextType;
   return {
-    division:document.getElementById('division').value, trainer,
-    driver:document.getElementById('driverName').value,
-    date:document.getElementById('evalDate').value,
-    dlClass:dlLabel, unit:document.getElementById('unitNum').value,
-    txt1:document.getElementById('txt1').value, txt2:document.getElementById('txt2').value,
-    txt3:document.getElementById('txt3').value, txt4:document.getElementById('txt4').value,
-    txt5:document.getElementById('txt5').value,
-    strengths:document.getElementById('strengths').value,
-    weakness:document.getElementById('weakness').value,
-    recommendations:document.getElementById('recommendations').value,
-    conclusion:conclusionState==='approved'?'Approved — '+(getChecked().join(', ')||'General'):'Not Approved',
-    nextEval:nextDate, notes:document.getElementById('notes').value,
-    sig1:pad1.isEmpty()?'':pad1.toDataURL(), sig2:pad2.isEmpty()?'':pad2.toDataURL(),
+    division:        document.getElementById('division').value,
+    trainer,
+    driver:          document.getElementById('driverName').value,
+    date:            document.getElementById('evalDate').value,
+    dlClass:         dlLabel,
+    unit:            document.getElementById('unitNum').value,
+    txt1:            document.getElementById('txt1').value,
+    txt2:            document.getElementById('txt2').value,
+    txt3:            document.getElementById('txt3').value,
+    txt4:            document.getElementById('txt4').value,
+    txt5:            document.getElementById('txt5').value,
+    strengths:       document.getElementById('strengths').value,
+    weakness:        document.getElementById('weakness').value,
+    recommendations: document.getElementById('recommendations').value,
+    conclusion:      conclusionState==='approved' ? 'Approved — '+(getChecked().join(', ')||'General') : 'Not Approved',
+    nextEval:        nextDate,
+    notes:           document.getElementById('notes').value,
+    sig1:            pad1.isEmpty() ? '' : pad1.toDataURL(),
+    sig2:            pad2.isEmpty() ? '' : pad2.toDataURL(),
   };
 }
-function submitForm(){
-  const d=collectFormData();
-  if(!d.driver){ alert('Please enter the driver name.'); return; }
-  if(!conclusionState){ alert('Please select Approved or Not Approved.'); return; }
-  console.log('Form data ready:', d);
-  alert('✔ Assessment captured!\nPhase 2: Google Sheets + PDF pipeline connects here.');
+
+// ── SUBMIT ──
+async function submitForm(){
+  const d   = collectFormData();
+  const btn = document.getElementById('submitBtn');
+
+  if(!d.driver)        { alert('Please enter the driver name.'); return; }
+  if(!conclusionState) { alert('Please select Approved or Not Approved.'); return; }
+
+  btn.textContent = '⟳ SUBMITTING…';
+  btn.disabled    = true;
+
+  try {
+    const url  = APPS_SCRIPT_URL + '?action=submitForm&data=' + encodeURIComponent(JSON.stringify(d));
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const result = await resp.json();
+    if (result.error) throw new Error(result.error);
+
+    btn.textContent      = '✔ SUBMITTED';
+    btn.style.background = '#005f20';
+    alert('✔ Assessment submitted!\n\nLogged to Sheets, PDF saved to Drive and emailed.');
+
+  } catch(err) {
+    console.error('Submit error:', err);
+    btn.textContent = 'SUBMIT ASSESSMENT';
+    btn.disabled    = false;
+    alert('⚠ Submission failed:\n' + err.message);
+  }
 }
 </script>
 </body>
