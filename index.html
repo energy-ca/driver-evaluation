@@ -595,6 +595,7 @@ async function submitForm(){
     btn.textContent      = '✔ SUBMITTED';
     btn.style.background = '#005f20';
     alert('✔ Assessment submitted!\n\nLogged to Sheets, PDF saved to Drive and emailed.');
+    window.location.reload();
 
   } catch(err) {
     console.error('Submit error:', err);
