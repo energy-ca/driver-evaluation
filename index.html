@@ -224,8 +224,8 @@
   <div class="section-body">
     <div class="eval-options">
       <button class="eval-pill active" id="ep-date"     onclick="setNextEval('date')">+3 Months</button>
-      <button class="eval-pill"        id="ep-incident" onclick="setNextEval('incident')">Post Incident / As Required</button>
-      <button class="eval-pill"        id="ep-na"       onclick="setNextEval('na')">N/A</button>
+      <button class="eval-pill"        id="ep-incident" onclick="setNextEval('Post Incident/As Required')">Post Incident / As Required</button>
+      <button class="eval-pill"        id="ep-na"       onclick="setNextEval('N/A')">N/A</button>
     </div>
     <input type="date" id="nextEvalDate" class="fi">
   </div>
@@ -574,8 +574,6 @@ async function submitForm(){
 
   if(!d.driver)        { alert('Please enter the driver name.'); return; }
   if(!conclusionState) { alert('Please select Approved or Not Approved.'); return; }
-  if(pad1.isEmpty())   { alert('Trainer signature is required.'); return; }
-  if(pad2.isEmpty())   { alert('Driver signature is required.'); return; }
   if(pad1.isEmpty())   { alert('Trainer signature is required.'); return; }
   if(pad2.isEmpty())   { alert('Driver signature is required.'); return; }
 
