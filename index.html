@@ -121,7 +121,13 @@
 <div class="page-header">
   <h1>DRIVER TRAINING &amp; ASSESSMENT</h1>
   <p>FLEET SAFETY · OILFIELD OPERATIONS</p>
-  <p style="font-size:10px;color:#444;margin-top:4px;">v1.4 · 2026-03-16</p>
+  <p style="font-size:10px;color:#444;margin-top:4px;">v1.5 · 2026-03-17</p>
+</div>
+
+<!-- MIC DIAGNOSTIC -->
+<div id="micTest" style="background:#1a1a1a;border:1px solid #333;border-radius:12px;padding:14px;margin-bottom:16px;text-align:center;">
+  <button onclick="testMic()" style="background:#0d1e2e;color:#33b5e5;border:1px solid #33b5e5;border-radius:9px;padding:12px 24px;font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:15px;cursor:pointer;letter-spacing:1px;">🎤 TEST MICROPHONE</button>
+  <p id="micStatus" style="margin:10px 0 0;font-size:13px;color:#888;">Tap to check mic access before using the form.</p>
 </div>
 
 <!-- INFO -->
@@ -566,6 +572,53 @@ function collectFormData(){
   };
 }
 
+// ── MIC DIAGNOSTIC ──
+function testMic() {
+  const status = document.getElementById('micStatus');
+  const btn    = document.querySelector('#micTest button');
+
+  // Check HTTPS
+  if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
+    status.textContent = '⚠ Page must be served over HTTPS. Current: ' + location.protocol;
+    status.style.color = '#ff4444';
+    return;
+  }
+
+  // Check browser support
+  if (!window.SpeechRecognition && !window.webkitSpeechRecognition) {
+    status.textContent = '⚠ Speech recognition not supported. Please use Chrome.';
+    status.style.color = '#ff4444';
+    return;
+  }
+
+  // Request mic permission explicitly
+  status.textContent = 'Requesting microphone access…';
+  status.style.color = '#ffbb33';
+
+  navigator.mediaDevices.getUserMedia({ audio: true })
+    .then(stream => {
+      // Permission granted — stop the stream immediately
+      stream.getTracks().forEach(t => t.stop());
+      status.textContent = '✔ Microphone access granted — voice is ready!';
+      status.style.color = '#00c853';
+      btn.textContent    = '✔ MIC OK';
+      btn.style.borderColor = '#00c853';
+      btn.style.color       = '#00c853';
+      // Hide the test panel after 3 seconds
+      setTimeout(() => { document.getElementById('micTest').style.display = 'none'; }, 3000);
+    })
+    .catch(err => {
+      status.style.color = '#ff4444';
+      if (err.name === 'NotAllowedError') {
+        status.innerHTML = '⚠ Microphone BLOCKED.<br>Tap the 🔒 lock icon in the address bar → Microphone → Allow → Reload.';
+      } else if (err.name === 'NotFoundError') {
+        status.textContent = '⚠ No microphone found on this device.';
+      } else {
+        status.textContent = '⚠ Mic error: ' + err.name + ' — ' + err.message;
+      }
+    });
+}
+
 // ── SUBMIT ──
 // Uses POST so large signature images don't blow up the URL length limit
 async function submitForm(){
@@ -574,6 +627,10 @@ async function submitForm(){
 
   if(!d.driver)        { alert('Please enter the driver name.'); return; }
   if(!conclusionState) { alert('Please select Approved or Not Approved.'); return; }
+  if(pad1.isEmpty())   { alert('Trainer signature is required.'); return; }
+  if(pad2.isEmpty())   { alert('Driver signature is required.'); return; }
+  if(pad1.isEmpty())   { alert('Trainer signature is required.'); return; }
+  if(pad2.isEmpty())   { alert('Driver signature is required.'); return; }
 
   btn.textContent = '⟳ SUBMITTING…';
   btn.disabled    = true;
