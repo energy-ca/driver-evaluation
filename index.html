@@ -530,23 +530,24 @@ const pad1 = new SignaturePad(canvas1), pad2 = new SignaturePad(canvas2);
 
 function resizeCanvas(){
   [[canvas1, pad1],[canvas2, pad2]].forEach(([c, pad]) => {
-    const r = Math.max(window.devicePixelRatio || 1, 1);
-    const newW = c.offsetWidth  * r;
-    const newH = c.offsetHeight * r;
-    // Only resize if dimensions actually changed — scroll on mobile
-    // hides/shows browser toolbar which triggers resize but doesn't
-    // change canvas width. Resizing wipes the drawing.
-    if (c.width === newW && c.height === newH) return;
-    // Save current signature data before resize wipes it
-    const data = pad.toData();
+    var r = Math.max(window.devicePixelRatio || 1, 1);
+    var newW = Math.round(c.offsetWidth  * r);
+    var newH = Math.round(c.offsetHeight * r);
+    // Ignore tiny differences — mobile toolbar show/hide causes
+    // 1-2px shifts that should not wipe the signature
+    if (Math.abs(c.width - newW) < 4 && Math.abs(c.height - newH) < 4) return;
+    var data = pad.toData();
     c.width  = newW;
     c.height = newH;
     c.getContext('2d').scale(r, r);
-    // Restore signature after resize
     if (data && data.length) pad.fromData(data);
   });
 }
-window.addEventListener('resize', resizeCanvas);
+var resizeTimer = null;
+window.addEventListener('resize', function(){
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(resizeCanvas, 250);
+});
 resizeCanvas();
 
 // ── COLLECT DATA ──
