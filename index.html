@@ -527,10 +527,27 @@ setNextEval('date');
 // ── SIGNATURES ──
 const canvas1 = document.getElementById('sig1'), canvas2 = document.getElementById('sig2');
 const pad1 = new SignaturePad(canvas1), pad2 = new SignaturePad(canvas2);
+
 function resizeCanvas(){
-  [canvas1,canvas2].forEach(c=>{ const r=Math.max(window.devicePixelRatio||1,1); c.width=c.offsetWidth*r; c.height=c.offsetHeight*r; c.getContext('2d').scale(r,r); });
+  [[canvas1, pad1],[canvas2, pad2]].forEach(([c, pad]) => {
+    const r = Math.max(window.devicePixelRatio || 1, 1);
+    const newW = c.offsetWidth  * r;
+    const newH = c.offsetHeight * r;
+    // Only resize if dimensions actually changed — scroll on mobile
+    // hides/shows browser toolbar which triggers resize but doesn't
+    // change canvas width. Resizing wipes the drawing.
+    if (c.width === newW && c.height === newH) return;
+    // Save current signature data before resize wipes it
+    const data = pad.toData();
+    c.width  = newW;
+    c.height = newH;
+    c.getContext('2d').scale(r, r);
+    // Restore signature after resize
+    if (data && data.length) pad.fromData(data);
+  });
 }
-window.addEventListener('resize', resizeCanvas); resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
+resizeCanvas();
 
 // ── COLLECT DATA ──
 function collectFormData(){
