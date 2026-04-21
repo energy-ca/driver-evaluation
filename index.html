@@ -16,7 +16,7 @@
     --green: #00c853;
     --red:   #ff4444;
     --amber: #ffbb33;
-    --purple:#9c27b0;
+    --purple:#9c27b0; /* Added from 2nd code */
     --dark:  #0e0e0e;
     --card:  #1a1a1a;
     --card2: #222;
@@ -50,45 +50,42 @@
   .dl-row { display:flex; gap:10px; }
   .dl-row select { flex:1; }
 
-  /* Modified Controls to handle 5 buttons */
-  .controls { display:flex; gap:6px; margin-bottom:10px; flex-wrap: wrap; }
-  .btn { padding:12px 6px; border:none; border-radius:9px; font-weight:700; font-size:11px; cursor:pointer; font-family:'Barlow Condensed',sans-serif; letter-spacing:1px; transition:opacity .15s; text-transform: uppercase; }
+  .controls { display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap; } /* Added wrap for extra buttons */
+  .btn { padding:12px 8px; border:none; border-radius:9px; font-weight:700; font-size:13px; cursor:pointer; font-family:'Barlow Condensed',sans-serif; letter-spacing:1px; transition:opacity .15s; }
   .btn:active { opacity:.75; }
   .btn-start { background:#1a2e1a; color:var(--green); border:1px solid var(--green); flex:1; }
-  .btn-stop  { background:#2e1a1a; color:var(--red);   border:1px solid var(--red);   flex:0.8; }
-  .btn-suggest { background:#1a0d2e; color:var(--purple); border:1px solid var(--purple); flex:1.2; }
-  .btn-cleanup { background:#2e2e1a; color:var(--amber);  border:1px solid var(--amber);  flex:1.2; }
-  .btn-    { background:#0d1e2e; color:var(--blue);  border:1px solid var(--blue);  flex:0.8; }
+  .btn-stop  { background:#2e1a1a; color:var(--red);   border:1px solid var(--red);   flex:1; }
+  .btn-ai    { background:#0d1e2e; color:var(--blue);  border:1px solid var(--blue);  flex:1; }
+  
+  /* Added specific buttons from 2nd code */
+  .btn-suggest { background:#1a0d2e; color:var(--purple); border:1px solid var(--purple); flex:1; }
+  .btn-cleanup { background:#2e2e1a; color:var(--amber);  border:1px solid var(--amber);  flex:1; }
 
   @keyframes recPulse { 0%{background:#2e1a1a;box-shadow:none;} 50%{background:#6a0000;box-shadow:0 0 10px #ff444466;} 100%{background:#2e1a1a;box-shadow:none;} }
   .rec-active { animation:recPulse 1s infinite !important; color:#fff !important; }
-  .-loading { opacity:.6; pointer-events:none; }
+  .ai-loading { opacity:.6; pointer-events:none; }
 
   textarea.fi { min-height:100px; line-height:1.5; resize:vertical; }
   textarea.input-active { border-color:var(--green) !important; }
 
-  .-preview { display:none; margin-top:10px; background:#0a1a2a; border:1px solid var(--blue); border-radius:10px; overflow:hidden; animation:fadeIn .2s ease; }
+  /* AI Preview and Suggestion Styles */
+  .ai-preview { display:none; margin-top:10px; background:#0a1a2a; border:1px solid var(--blue); border-radius:10px; overflow:hidden; animation:fadeIn .2s ease; }
   .ai-preview.suggest-mode { background:#0a0a2a; border-color:var(--purple); }
   .ai-preview.cleanup-mode { background:#2a2a0a; border-color:var(--amber); }
-
+  
   @keyframes fadeIn { from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);} }
   .ai-preview-header { display:flex; align-items:center; justify-content:space-between; padding:8px 12px; background:#0d2040; border-bottom:1px solid #1a3a5a; }
-  .ai-preview.suggest-mode .ai-preview-header { background:#1a0d40; border-bottom-color:#2a1a5a; }
-  .ai-preview.cleanup-mode .ai-preview-header { background:#2a2a0d; border-bottom-color:#3a3a1a; }
-  
   .ai-preview-header span { font-size:11px; font-weight:700; color:var(--blue); letter-spacing:1.5px; text-transform:uppercase; }
-  .ai-preview.suggest-mode .ai-preview-header span:first-child { color:var(--purple); }
-  .ai-preview.cleanup-mode .ai-preview-header span:first-child { color:var(--amber); }
-  
   .ai-preview-text { padding:12px; font-size:14px; line-height:1.6; color:#d0e8f8; white-space:pre-wrap; word-break:break-word; }
   .ai-preview-actions { display:flex; gap:8px; padding:10px 12px; border-top:1px solid #1a3a5a; }
-  
   .btn-accept  { flex:1; padding:11px; background:#0d2e1a; color:var(--green); border:1px solid var(--green); border-radius:8px; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:14px; cursor:pointer; letter-spacing:1px; }
   .btn-discard { flex:1; padding:11px; background:#2e1a1a; color:var(--red); border:1px solid var(--red); border-radius:8px; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:14px; cursor:pointer; letter-spacing:1px; }
 
+  /* Suggestion Item styles */
   .suggestion-list { max-height:300px; overflow-y:auto; padding:8px 12px; }
-  .suggestion-item { display:flex; align-items:flex-start; gap:10px; padding:10px; margin:6px 0; background:#0a0a2a; border:1px solid #2a1a5a; border-radius:8px; cursor:pointer; }
-  .suggestion-item input[type=checkbox] { width:18px; height:18px; accent-color:var(--purple); }
+  .suggestion-item { display:flex; align-items:flex-start; gap:10px; padding:10px; margin:6px 0; background:#0a0a2a; border:1px solid #2a1a5a; border-radius:8px; cursor:pointer; transition:all .2s; }
+  .suggestion-item input[type=checkbox] { width:18px; height:18px; margin-top:2px; accent-color:var(--purple); cursor:pointer; flex-shrink:0; }
+  .suggestion-item label { font-size:14px; line-height:1.5; color:#e8d0f8; cursor:pointer; flex:1; }
 
   .section.amber { border-top-color:var(--amber); }
   .section.amber h3 { color:var(--amber); }
@@ -100,21 +97,29 @@
   .btn-reject.active { background:var(--red); color:#000; }
 
   #approvedFor { display:none; background:var(--card2); border-radius:10px; padding:14px; margin-bottom:10px; }
-  .check-item { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); }
-  .check-item input[type=checkbox] { width:20px; height:20px; accent-color:var(--green); }
+  #approvedFor p { font-size:12px; font-weight:700; color:var(--muted); letter-spacing:1px; text-transform:uppercase; margin:0 0 10px; }
+  .check-item { display:flex; align-items:center; gap:10px; padding:8px 0; border-bottom:1px solid var(--border); cursor:pointer; }
+  .check-item:last-child { border-bottom:none; }
+  .check-item input[type=checkbox] { width:20px; height:20px; accent-color:var(--green); cursor:pointer; }
+  .check-item label { font-size:15px; cursor:pointer; flex:1; }
 
   .eval-options { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
-  .eval-pill { padding:9px 16px; border-radius:20px; border:1px solid var(--border); background:var(--card2); color:var(--muted); font-size:13px; cursor:pointer; }
+  .eval-pill { padding:9px 16px; border-radius:20px; border:1px solid var(--border); background:var(--card2); color:var(--muted); font-size:13px; cursor:pointer; font-family:'Barlow',sans-serif; transition:all .2s; }
   .eval-pill.active { border-color:var(--blue); color:var(--blue); background:#0d1e2e; }
 
   #conclusionSummary { display:none; background:#0d1e0d; border:1px solid var(--green); border-radius:10px; padding:14px; margin-bottom:16px; }
   #conclusionSummary.rejected { background:#1e0d0d; border-color:var(--red); }
+  #conclusionSummary h4 { font-family:'Barlow Condensed',sans-serif; font-size:16px; letter-spacing:1px; margin:0 0 6px; color:var(--green); text-transform:uppercase; }
+  #conclusionSummary.rejected h4 { color:var(--red); }
+  #conclusionSummary p { margin:3px 0; font-size:14px; color:#ccc; }
 
   .sig-wrap { background:white; border-radius:10px; margin:6px 0 4px; }
   canvas { width:100%; height:170px; touch-action:none; border-radius:10px; display:block; }
   .sig-clear { background:none; border:none; color:var(--blue); font-size:13px; padding:4px 0 10px; cursor:pointer; }
 
-  .submit-btn { width:100%; background:var(--green); color:#000; border:none; padding:20px; border-radius:14px; font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:700; letter-spacing:2px; cursor:pointer; margin-top:10px; }
+  .submit-btn { width:100%; background:var(--green); color:#000; border:none; padding:20px; border-radius:14px; font-family:'Barlow Condensed',sans-serif; font-size:22px; font-weight:700; letter-spacing:2px; cursor:pointer; margin-top:10px; transition:opacity .2s; }
+  .submit-btn:active { opacity:.85; }
+  .submit-btn:disabled { opacity:.6; cursor:not-allowed; }
 </style>
 </head>
 <body>
@@ -134,6 +139,7 @@
 <div class="section" style="border-top-color:#555;">
   <div class="section-head"><h3>Assessment Info</h3></div>
   <div class="section-body">
+
     <label class="field-label">Division</label>
     <select id="division" class="fi">
       <option>Snubbing</option>
@@ -166,6 +172,7 @@
 
     <label class="field-label">Unit #</label>
     <input type="text" id="unitNum" class="fi" placeholder="Truck / Unit ID">
+
   </div>
 </div>
 
@@ -180,7 +187,7 @@
       <button class="btn btn-start" onclick="voiceStart('strengths',this)">▶ START</button>
       <button class="btn btn-stop"  onclick="voiceStop()">■ STOP</button>
       <button class="btn btn-suggest" onclick="aiSuggest('strengths','strengths')">+ SUGGEST</button>
-      <button class="btn btn-cleanup" onclick="aiCleanup('strengths')">⚡ CLEAN</button>
+      <button class="btn btn-cleanup" onclick="aiCleanup('strengths')">⚡ CLEAN UP</button>
       <button class="btn btn-ai"    onclick="aiImprove('strengths','strengths')">✦ AI</button>
     </div>
     <textarea id="strengths" class="fi" placeholder="Driver strengths observed…"></textarea>
@@ -190,7 +197,7 @@
       <button class="btn btn-start" onclick="voiceStart('weakness',this)">▶ START</button>
       <button class="btn btn-stop"  onclick="voiceStop()">■ STOP</button>
       <button class="btn btn-suggest" onclick="aiSuggest('weakness','weaknesses')">+ SUGGEST</button>
-      <button class="btn btn-cleanup" onclick="aiCleanup('weakness')">⚡ CLEAN</button>
+      <button class="btn btn-cleanup" onclick="aiCleanup('weakness')">⚡ CLEAN UP</button>
       <button class="btn btn-ai"    onclick="aiImprove('weakness','weaknesses')">✦ AI</button>
     </div>
     <textarea id="weakness" class="fi" placeholder="Areas requiring improvement…"></textarea>
@@ -200,7 +207,7 @@
       <button class="btn btn-start" onclick="voiceStart('recommendations',this)">▶ START</button>
       <button class="btn btn-stop"  onclick="voiceStop()">■ STOP</button>
       <button class="btn btn-suggest" onclick="aiSuggest('recommendations','recommendations')">+ SUGGEST</button>
-      <button class="btn btn-cleanup" onclick="aiCleanup('recommendations')">⚡ CLEAN</button>
+      <button class="btn btn-cleanup" onclick="aiCleanup('recommendations')">⚡ CLEAN UP</button>
       <button class="btn btn-ai"    onclick="aiImprove('recommendations','recommendations')">✦ AI</button>
     </div>
     <textarea id="recommendations" class="fi" placeholder="Recommended actions or training…"></textarea>
@@ -262,23 +269,17 @@
 <button class="submit-btn" id="submitBtn" onclick="submitForm()">SUBMIT ASSESSMENT</button>
 
 <script>
-// --- CONFIG ---
-const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyu6mbuoc2io8SxulkpZmJRfT4eOb-qlRa7kettDYkmn27CN3t7oSoFlc0ItEytoAcfTQ/exec';
+// ── Force fresh state — no cached form data ever ──
+if (window.performance && window.performance.navigation.type === 2) {
+  window.location.reload(true);
+}
+window.addEventListener('load', () => {
+  document.querySelectorAll('input.fi, textarea.fi, select.fi').forEach(el => {
+    if (el.type !== 'date' && el.tagName !== 'SELECT') el.value = '';
+  });
+});
 
-// --- DATASET FROM CODE 2 ---
-const SUGGESTIONS_DB = {
-  'txt1': ['Demonstrates thorough pre-trip inspection procedures including fluid levels, lights, and tire condition','Properly executes coupling and uncoupling procedures with attention to safety protocols','Shows competent backing technique with effective use of mirrors and controlled speed','Handles congested traffic areas with appropriate caution and defensive awareness','Follows proper accident reporting and convoy procedures as per company policy','Demonstrates knowledge of TDG (Transportation of Dangerous Goods) requirements and placarding'],
-  'txt2': ['Maintains smooth shifting throughout entire gear range without grinding or excessive engine revving','Demonstrates consistent lane positioning and tracking without excessive drift or correction','Uses mirrors effectively with regular scanning pattern and proper blind spot awareness','Maintains safe following distances appropriate for vehicle size, speed, and road conditions','Signals all lane changes and turns well in advance of maneuver execution','Adjusts speed appropriately for traffic flow, weather conditions, and road surface'],
-  'txt3': ['Performs proper LRL (Left-Right-Left) visual checks before entering all intersections','Selects appropriate gear before intersection approach, avoiding mid-intersection shifting','Demonstrates smooth and controlled braking without abrupt stops or brake fade','Maintains lane position through turns without cutting corners or wide swings','Shows proper clearance awareness at railroad crossings with complete stops when required','Checks for clearance and traffic conflicts before proceeding through intersections'],
-  'txt4': ['Uses clutch smoothly with proper engagement timing and no excessive slipping','Coordinates throttle and clutch effectively for smooth starts on grades and level ground','Employs engine brake appropriately to reduce service brake wear on descents','Manages engine RPM within optimal range for fuel efficiency and equipment longevity','Demonstrates understanding of proper braking techniques including threshold and progressive braking','Shows knowledge of air brake system operation and limitations'],
-  'txt5': ['Consistently scans ahead 12-15 seconds to identify potential hazards early','Maintains adequate space cushion around vehicle allowing for escape routes','Anticipates actions of other drivers and adjusts position or speed proactively','Demonstrates "big picture" awareness of surrounding traffic patterns and flow','Adapts driving style appropriately for adverse weather including rain, snow, or ice','Shows proper response to aggressive drivers by yielding space and avoiding confrontation'],
-  'strengths': ['Demonstrates excellent vehicle control and smooth operation throughout assessment','Shows strong situational awareness and ability to anticipate traffic conflicts','Maintains professional demeanor and follows all safety protocols consistently','Displays thorough understanding of equipment capabilities and limitations','Communicates clearly and responds well to coaching and feedback','Exhibits mature judgment in complex traffic situations and decision-making'],
-  'weakness': ['Requires additional practice with backing maneuvers in tight spaces','Needs improvement in maintaining consistent following distances','Should focus on earlier signal activation before lane changes','Would benefit from more frequent mirror checks and blind spot awareness','Needs to improve speed management in varying road conditions','Requires better coordination between clutch and throttle during starts'],
-  'recommendations': ['Schedule follow-up evaluation session within 30-60 days to assess improvement','Recommend additional supervised practice hours focusing on identified weakness areas','Suggest review of defensive driving techniques with senior driver or trainer','Advise practice in controlled environment before operating in heavy traffic conditions','Recommend attendance at company safety refresher course within next quarter','Suggest mentorship pairing with experienced driver for on-road coaching'],
-  'notes': ['Weather conditions during evaluation: clear/overcast/rain/snow','Route included highway, urban, and residential driving scenarios','Driver demonstrated positive attitude and willingness to learn throughout assessment','Additional training materials provided to driver for self-study','Driver asked relevant questions showing engagement with evaluation process','Follow-up documentation sent to safety department for record-keeping']
-};
-
-// --- INITIALIZATION ---
+// ── Defaults ──
 document.getElementById('evalDate').valueAsDate = new Date();
 (function(){ const d=new Date(); d.setMonth(d.getMonth()+3); document.getElementById('nextEvalDate').value=d.toISOString().split('T')[0]; })();
 
@@ -286,14 +287,112 @@ function toggleTrainerOther(sel) {
   document.getElementById('trainerOther').style.display = sel.value==='__other__' ? 'block' : 'none';
 }
 
-const sectionDefs = [
-  { id:'txt1', title:'1. General & Procedures', desc:'Accident/Convoy Procedures, Inspections, Coupling, Chaining, Backing, Off-Road, TDG.' },
-  { id:'txt2', title:'2. Main Driving', desc:'Shifting, Steering, Lane Control, Signaling, Speed, Eye Movement, Following Distances.' },
-  { id:'txt3', title:'3. Intersections and R.R. Crossings', desc:'Steering, Lane Control, Signaling, Gear(s), Eye Movement, LRL, Braking.' },
-  { id:'txt4', title:'4. Equipment Operations', desc:'Clutch, Transmission, Engine, Engine Brake, Proper Braking Techniques.' },
-  { id:'txt5', title:'5. Defensive Driving', desc:'Anticipating Conflict, Speed for Conditions, Getting the Big Picture.' },
-];
+// ── DL Class ──
+const endMap = {
+  '1': [{ v:'',  l:'Air brake included by law' }],
+  '3': [{ v:'',  l:'None' }, { v:'Q', l:'Q — Air Brake' }],
+  '5': [{ v:'',  l:'None' }, { v:'Q', l:'Q — Air Brake' }],
+};
+function updateEndOptions() {
+  const cls = document.getElementById('dlClass').value;
+  const sel = document.getElementById('dlEnd');
+  sel.innerHTML = '';
+  (endMap[cls]||[]).forEach(o => {
+    const opt = document.createElement('option');
+    opt.value=o.v; opt.textContent=o.l; sel.appendChild(opt);
+  });
+}
+updateEndOptions();
 
+// ── Suggestion Database (From Code 2) ──
+const SUGGESTIONS_DB = {
+  'txt1': [
+    'Demonstrates thorough pre-trip inspection procedures including fluid levels, lights, and tire condition',
+    'Properly executes coupling and uncoupling procedures with attention to safety protocols',
+    'Shows competent backing technique with effective use of mirrors and controlled speed',
+    'Handles congested traffic areas with appropriate caution and defensive awareness',
+    'Follows proper accident reporting and convoy procedures as per company policy',
+    'Demonstrates knowledge of TDG (Transportation of Dangerous Goods) requirements and placarding'
+  ],
+  'txt2': [
+    'Maintains smooth shifting throughout entire gear range without grinding or excessive engine revving',
+    'Demonstrates consistent lane positioning and tracking without excessive drift or correction',
+    'Uses mirrors effectively with regular scanning pattern and proper blind spot awareness',
+    'Maintains safe following distances appropriate for vehicle size, speed, and road conditions',
+    'Signals all lane changes and turns well in advance of maneuver execution',
+    'Adjusts speed appropriately for traffic flow, weather conditions, and road surface'
+  ],
+  'txt3': [
+    'Performs proper LRL (Left-Right-Left) visual checks before entering all intersections',
+    'Selects appropriate gear before intersection approach, avoiding mid-intersection shifting',
+    'Demonstrates smooth and controlled braking without abrupt stops or brake fade',
+    'Maintains lane position through turns without cutting corners or wide swings',
+    'Shows proper clearance awareness at railroad crossings with complete stops when required',
+    'Checks for clearance and traffic conflicts before proceeding through intersections'
+  ],
+  'txt4': [
+    'Uses clutch smoothly with proper engagement timing and no excessive slipping',
+    'Coordinates throttle and clutch effectively for smooth starts on grades and level ground',
+    'Employs engine brake appropriately to reduce service brake wear on descents',
+    'Manages engine RPM within optimal range for fuel efficiency and equipment longevity',
+    'Demonstrates understanding of proper braking techniques including threshold and progressive braking',
+    'Shows knowledge of air brake system operation and limitations'
+  ],
+  'txt5': [
+    'Consistently scans ahead 12-15 seconds to identify potential hazards early',
+    'Maintains adequate space cushion around vehicle allowing for escape routes',
+    'Anticipates actions of other drivers and adjusts position or speed proactively',
+    'Demonstrates "big picture" awareness of surrounding traffic patterns and flow',
+    'Adapts driving style appropriately for adverse weather including rain, snow, or ice',
+    'Shows proper response to aggressive drivers by yielding space and avoiding confrontation'
+  ],
+  'strengths': [
+    'Demonstrates excellent vehicle control and smooth operation throughout assessment',
+    'Shows strong situational awareness and ability to anticipate traffic conflicts',
+    'Maintains professional demeanor and follows all safety protocols consistently',
+    'Displays thorough understanding of equipment capabilities and limitations',
+    'Communicates clearly and responds well to coaching and feedback',
+    'Exhibits mature judgment in complex traffic situations and decision-making'
+  ],
+  'weakness': [
+    'Requires additional practice with backing maneuvers in tight spaces',
+    'Needs improvement in maintaining consistent following distances',
+    'Should focus on earlier signal activation before lane changes',
+    'Would benefit from more frequent mirror checks and blind spot awareness',
+    'Needs to improve speed management in varying road conditions',
+    'Requires better coordination between clutch and throttle during starts'
+  ],
+  'recommendations': [
+    'Schedule follow-up evaluation session within 30-60 days to assess improvement',
+    'Recommend additional supervised practice hours focusing on identified weakness areas',
+    'Suggest review of defensive driving techniques with senior driver or trainer',
+    'Advise practice in controlled environment before operating in heavy traffic conditions',
+    'Recommend attendance at company safety refresher course within next quarter',
+    'Suggest mentorship pairing with experienced driver for on-road coaching'
+  ],
+  'notes': [
+    'Weather conditions during evaluation: clear/overcast/rain/snow',
+    'Route included highway, urban, and residential driving scenarios',
+    'Driver demonstrated positive attitude and willingness to learn throughout assessment',
+    'Additional training materials provided to driver for self-study',
+    'Driver asked relevant questions showing engagement with evaluation process',
+    'Follow-up documentation sent to safety department for record-keeping'
+  ]
+};
+
+// ── Build sections ──
+const sectionDefs = [
+  { id:'txt1', title:'1. General & Procedures',
+    desc:'Accident/Convoy Procedures, Congested Areas, Pre-Trip and Post-Trip Inspections, En-Route Inspections, Coupling and Uncoupling, Chaining Up, Backing, Off-Road Driving, TDG.' },
+  { id:'txt2', title:'2. Main Driving',
+    desc:'Shifting Ability, Steering Control, Lane Control and Tracking, Signaling, Speed Control, Eye Movement / Vision, Following Distances.' },
+  { id:'txt3', title:'3. Intersections and R.R. Crossings',
+    desc:'Steering Control, Lane Control and Tracking, Signaling, Gear(s), Eye Movement / Vision, LRL (Left, Right, Left), Braking and Stopping.' },
+  { id:'txt4', title:'4. Equipment Operations',
+    desc:'Clutch, Transmission, Engine, Engine Brake, Proper Braking Techniques.' },
+  { id:'txt5', title:'5. Defensive Driving',
+    desc:'Anticipating Conflict, Speed for Conditions, Getting the Big Picture.' },
+];
 (function(){
   const c = document.getElementById('sections-container');
   sectionDefs.forEach(s => {
@@ -305,10 +404,10 @@ const sectionDefs = [
           <button class="btn btn-start" onclick="voiceStart('${s.id}',this)">▶ START</button>
           <button class="btn btn-stop"  onclick="voiceStop()">■ STOP</button>
           <button class="btn btn-suggest" onclick="aiSuggest('${s.id}','${s.title}')">+ SUGGEST</button>
-          <button class="btn btn-cleanup" onclick="aiCleanup('${s.id}')">⚡ CLEAN</button>
+          <button class="btn btn-cleanup" onclick="aiCleanup('${s.id}')">⚡ CLEAN UP</button>
           <button class="btn btn-ai"    onclick="aiImprove('${s.id}','${s.title}')">✦ AI</button>
         </div>
-        <textarea id="${s.id}" class="fi" placeholder="Observations…"></textarea>
+        <textarea id="${s.id}" class="fi" placeholder="Speak or type observations…"></textarea>
       </div>
     </div>`;
   });
@@ -321,25 +420,30 @@ document.getElementById('notes-container').innerHTML = `
       <div class="controls">
         <button class="btn btn-start" onclick="voiceStart('notes',this)">▶ START</button>
         <button class="btn btn-stop"  onclick="voiceStop()">■ STOP</button>
-        <button class="btn btn-suggest" onclick="aiSuggest('notes','notes')">+ SUGGEST</button>
-        <button class="btn btn-cleanup" onclick="aiCleanup('notes')">⚡ CLEAN</button>
+        <button class="btn btn-suggest" onclick="aiSuggest('notes','general notes')">+ SUGGEST</button>
+        <button class="btn btn-cleanup" onclick="aiCleanup('notes')">⚡ CLEAN UP</button>
         <button class="btn btn-ai"    onclick="aiImprove('notes','general notes')">✦ AI</button>
       </div>
       <textarea id="notes" class="fi" placeholder="Additional notes…"></textarea>
     </div>
   </div>`;
 
-// --- VOICE LOGIC ---
-let recognition=null, activeArea=null, finalTranscript='', isRecording=false, restartTimer=null, sessionId=0;
+// ── VOICE ──
+let recognition=null, activeArea=null;
+let finalTranscript='', isRecording=false, restartTimer=null;
+let sessionId=0;
 
 function dedupe(existing, newText) {
   if (!existing.trim() || !newText) return newText;
-  const exWords = existing.trim().toLowerCase().split(/\s+/);
+  const exWords  = existing.trim().toLowerCase().split(/\s+/);
   const newWords = newText.trim().toLowerCase().split(/\s+/);
   for (let overlap = Math.min(exWords.length, newWords.length); overlap > 0; overlap--) {
-    const tail = exWords.slice(-overlap).join(' ');
-    const head = newWords.slice(0, overlap).join(' ');
-    if (tail === head) return newText.trim().split(/\s+/).slice(overlap).join(' ');
+    const tail  = exWords.slice(-overlap).join(' ');
+    const head  = newWords.slice(0, overlap).join(' ');
+    if (tail === head) {
+      const remainder = newText.trim().split(/\s+/).slice(overlap).join(' ');
+      return remainder;
+    }
   }
   return newText;
 }
@@ -352,198 +456,368 @@ function voiceStart(areaId, startBtn) {
   startBtn.classList.add('rec-active');
   startSession();
 }
-
 function startSession() {
   if(!isRecording) return;
   const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
-  if(!SR){ alert('Chrome required for speech.'); return; }
+  if(!SR){ alert('Speech recognition requires Chrome.'); return; }
   const thisSession = ++sessionId;
   recognition = new SR();
   recognition.continuous = true;
   recognition.interimResults = true;
-  recognition.onresult = (e) => {
+  recognition.lang = 'en-US';
+  recognition.onresult = (event) => {
     if(thisSession !== sessionId) return;
     let interim = '';
-    for(let i=e.resultIndex; i<e.results.length; i++){
-      const t = e.results[i][0].transcript.trim();
-      if(e.results[i].isFinal) finalTranscript += dedupe(finalTranscript, t) + ' ';
-      else interim = t;
+    for(let i=event.resultIndex; i<event.results.length; i++){
+      const t = event.results[i][0].transcript.trim();
+      if(event.results[i].isFinal) {
+        finalTranscript += dedupe(finalTranscript, t) + ' ';
+      } else {
+        interim = t;
+      }
     }
     activeArea.value = finalTranscript + interim;
+    activeArea.scrollTop = activeArea.scrollHeight;
     activeArea.classList.add('input-active');
   };
-  recognition.onend = () => { if(isRecording) scheduleRestart(); };
+  recognition.onerror = (e) => {
+    if(thisSession !== sessionId) return;
+    if(['network','audio-capture','no-speech'].includes(e.error)) scheduleRestart();
+  };
+  recognition.onend = () => {
+    if(thisSession !== sessionId) return;
+    if(isRecording) scheduleRestart(); else cleanup();
+  };
   recognition.start();
 }
-
 function scheduleRestart(){ clearTimeout(restartTimer); restartTimer=setTimeout(()=>{ if(isRecording) startSession(); },350); }
-function voiceStop(){ isRecording=false; clearTimeout(restartTimer); if(recognition) recognition.stop(); cleanup(); }
+function voiceStop(){ isRecording=false; clearTimeout(restartTimer); if(recognition){recognition.stop();recognition=null;} cleanup(); }
 function cleanup(){ document.querySelectorAll('.btn-start').forEach(b=>b.classList.remove('rec-active')); if(activeArea) activeArea.classList.remove('input-active'); }
 
-// --- SUGGESTING LOGIC (FROM CODE 2) ---
+// ── APPS SCRIPT URL ──
+const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyu6mbuoc2io8SxulkpZmJRfT4eOb-qlRa7kettDYkmn27CN3t7oSoFlc0ItEytoAcfTQ/exec';
+
+// ── AI IMPROVE (Original 1st Code Function) ──
+async function aiImprove(areaId, sectionKey) {
+  const area = document.getElementById(areaId);
+  const raw  = area.value.trim();
+  if (!raw) { area.placeholder = 'Add some text first, then press ✦ AI.'; return; }
+
+  let preview = area.nextElementSibling;
+  if (!preview || !preview.classList.contains('ai-preview')) {
+    preview = document.createElement('div');
+    preview.className = 'ai-preview';
+    preview.innerHTML = `
+      <div class="ai-preview-header">
+        <span>✦ AI Suggestion</span>
+        <span style="font-size:11px;color:var(--muted);">Review before accepting</span>
+      </div>
+      <div class="ai-preview-text"></div>
+      <div class="ai-preview-actions">
+        <button class="btn-accept"  onclick="acceptAI(this)">✔ ACCEPT</button>
+        <button class="btn-discard" onclick="discardAI(this)">✘ DISCARD</button>
+      </div>`;
+    area.insertAdjacentElement('afterend', preview);
+  }
+
+  const previewText = preview.querySelector('.ai-preview-text');
+  const controls    = area.previousElementSibling;
+  const aiBtn        = controls ? controls.querySelector('.btn-ai') : null;
+
+  preview.style.display = 'block';
+  previewText.textContent = 'Improving your text…';
+  previewText.style.color = 'var(--muted)';
+  if (aiBtn) { aiBtn.textContent = '⟳ AI'; aiBtn.classList.add('ai-loading'); }
+
+  try {
+    const url = APPS_SCRIPT_URL
+      + '?action=improveText'
+      + '&section=' + encodeURIComponent(sectionKey)
+      + '&text='    + encodeURIComponent(raw);
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+    if (data.error) throw new Error(data.error);
+    const improved = (data.result || '').trim();
+    if (improved) {
+      previewText.textContent = improved;
+      previewText.style.color = '#d0e8f8';
+      preview.dataset.improved = improved;
+      preview.dataset.areaId   = areaId;
+    } else {
+      throw new Error('Empty response from AI');
+    }
+  } catch (err) {
+    console.error('AI error:', err);
+    previewText.textContent = '⚠ ' + err.message;
+    previewText.style.color = 'var(--red)';
+    preview.dataset.improved = '';
+  } finally {
+    if (aiBtn) { aiBtn.textContent = '✦ AI'; aiBtn.classList.remove('ai-loading'); }
+  }
+}
+
+// ── AI SUGGEST (Added from 2nd Code) ──
 function aiSuggest(areaId, sectionKey) {
   const area = document.getElementById(areaId);
   const existing = area.value.trim().toLowerCase();
   let suggestions = SUGGESTIONS_DB[areaId] || SUGGESTIONS_DB['notes'];
   
+  suggestions = suggestions.filter(sugg => {
+    const keywords = sugg.toLowerCase().split(' ').filter(w => w.length > 5);
+    return !keywords.some(kw => existing.includes(kw));
+  });
+  
+  if (suggestions.length === 0) { suggestions = SUGGESTIONS_DB[areaId] || SUGGESTIONS_DB['notes']; }
+
   let preview = area.nextElementSibling;
   if (!preview || !preview.classList.contains('ai-preview')) {
     preview = document.createElement('div');
     preview.className = 'ai-preview suggest-mode';
     area.insertAdjacentElement('afterend', preview);
+  } else {
+    preview.className = 'ai-preview suggest-mode';
   }
 
-  let html = `<div class="ai-preview-header"><span>+ Suggestions</span><span>Select to add</span></div><div class="suggestion-list">`;
+  let html = `
+    <div class="ai-preview-header">
+      <span>+ Select Suggestions to Add</span>
+      <span style="font-size:11px;color:var(--muted);">Choose items to add</span>
+    </div>
+    <div class="suggestion-list" style="padding:12px;max-height:400px;overflow-y:auto;">`;
+  
   suggestions.forEach((sugg, idx) => {
-    html += `<label class="suggestion-item"><input type="checkbox" value="${idx}"><span>${sugg}</span></label>`;
+    html += `
+      <label class="suggestion-item">
+        <input type="checkbox" value="${idx}">
+        <span>${sugg}</span>
+      </label>`;
   });
-  html += `</div><div class="ai-preview-actions"><button class="btn-accept" onclick="addSuggestions(this, '${areaId}')">✔ ADD</button><button class="btn-discard" onclick="discardAI(this)">✘ CANCEL</button></div>`;
+  
+  html += `
+    </div>
+    <div class="ai-preview-actions">
+      <button class="btn-accept" onclick="addSelectedSuggestions(this, '${areaId}')">✔ ADD SELECTED</button>
+      <button class="btn-discard" onclick="discardAI(this)">✘ CANCEL</button>
+    </div>`;
   
   preview.innerHTML = html;
   preview.style.display = 'block';
   preview.dataset.suggestions = JSON.stringify(suggestions);
+  preview.dataset.areaId = areaId;
 }
 
-function addSuggestions(btn, areaId) {
+function addSelectedSuggestions(btn, areaId) {
   const preview = btn.closest('.ai-preview');
   const area = document.getElementById(areaId);
   const suggestions = JSON.parse(preview.dataset.suggestions);
-  const selected = Array.from(preview.querySelectorAll('input:checked')).map(cb => suggestions[cb.value]);
-  if (!selected.length) return;
+  const checkboxes = preview.querySelectorAll('input[type="checkbox"]:checked');
+  if (checkboxes.length === 0) { alert('Please select at least one suggestion'); return; }
+  const selected = Array.from(checkboxes).map(cb => suggestions[parseInt(cb.value)]);
   const current = area.value.trim();
-  area.value = current ? current + '\n' + selected.join(' ') : selected.join(' ');
+  const newText = selected.join('. ') + '.';
+  area.value = current ? current + '\n\n' + newText : newText;
   finalTranscript = area.value;
+  area.style.borderColor = 'var(--green)';
+  setTimeout(() => { area.style.borderColor = ''; }, 800);
   preview.style.display = 'none';
 }
 
-// --- CLEANING LOGIC (FROM CODE 2) ---
+// ── AI CLEANUP (Added from 2nd Code) ──
 function aiCleanup(areaId) {
   const area = document.getElementById(areaId);
-  let raw = area.value.trim();
-  if (!raw) return;
-
-  // Strips voice artifacts
-  let cleaned = raw.replace(/\b(um|uh|ah|er|like|you know|basically)\b/gi, '')
-                   .replace(/\s+/g, ' ')
-                   .replace(/\s+\./g, '.')
-                   .replace(/(^\w|\.\s+\w)/g, l => l.toUpperCase()).trim();
+  const raw = area.value.trim();
+  if (!raw) { area.placeholder = 'Add some text first, then press ⚡ CLEAN UP.'; return; }
 
   let preview = area.nextElementSibling;
   if (!preview || !preview.classList.contains('ai-preview')) {
     preview = document.createElement('div');
     preview.className = 'ai-preview cleanup-mode';
     area.insertAdjacentElement('afterend', preview);
+  } else {
+    preview.className = 'ai-preview cleanup-mode';
   }
 
+  let cleaned = raw;
+  const fillers = [
+    /\b(um|uh|ah|er|like|you know|I mean|basically|actually)\b/gi,
+    /\b(hey|hello|hi there)\b/gi,
+    /\b(okay|alright|yeah|yep|nope)\s+/gi
+  ];
+  fillers.forEach(pattern => { cleaned = cleaned.replace(pattern, ''); });
+  cleaned = cleaned.replace(/\s+/g, ' ').replace(/\s+[a-z]\s+/gi, ' ').replace(/\s+\./g, '.').replace(/\s+,/g, ',').replace(/\.+/g, '.');
+  cleaned = cleaned.replace(/(^\w|\.\s+\w)/g, letter => letter.toUpperCase()).trim();
+
   preview.innerHTML = `
-    <div class="ai-preview-header"><span>⚡ Cleaned Text</span><span>Review</span></div>
-    <div class="ai-preview-text">${cleaned}</div>
+    <div class="ai-preview-header">
+      <span>⚡ Cleaned Text Preview</span>
+      <span style="font-size:11px;color:var(--muted);">Review before replacing</span>
+    </div>
+    <div class="ai-preview-text" style="color:#f8f0d0;">${cleaned}</div>
     <div class="ai-preview-actions">
       <button class="btn-accept" onclick="acceptCleaned(this, '${areaId}', ${JSON.stringify(cleaned).replace(/"/g, '&quot;')})">✔ REPLACE</button>
       <button class="btn-discard" onclick="discardAI(this)">✘ CANCEL</button>
     </div>`;
+  
   preview.style.display = 'block';
 }
 
-function acceptCleaned(btn, areaId, txt) {
-  document.getElementById(areaId).value = txt;
-  finalTranscript = txt;
+function acceptCleaned(btn, areaId, cleanedText) {
+  const area = document.getElementById(areaId);
+  area.value = cleanedText;
+  finalTranscript = cleanedText;
+  area.style.borderColor = 'var(--green)';
+  setTimeout(() => { area.style.borderColor = ''; }, 800);
   btn.closest('.ai-preview').style.display = 'none';
 }
 
-// --- ORIGINAL AI IMPROVE (GOOGLE SCRIPT) ---
-async function aiImprove(areaId, sectionKey) {
-  const area = document.getElementById(areaId);
-  const raw = area.value.trim();
-  if (!raw) return;
-
-  let preview = area.nextElementSibling;
-  if (!preview || !preview.classList.contains('ai-preview')) {
-    preview = document.createElement('div');
-    preview.className = 'ai-preview';
-    preview.innerHTML = `<div class="ai-preview-header"><span>✦ AI Suggestion</span></div><div class="ai-preview-text"></div><div class="ai-preview-actions"><button class="btn-accept" onclick="acceptAI(this)">✔ ACCEPT</button><button class="btn-discard" onclick="discardAI(this)">✘ DISCARD</button></div>`;
-    area.insertAdjacentElement('afterend', preview);
-  }
-  const previewText = preview.querySelector('.ai-preview-text');
-  preview.className = 'ai-preview'; // reset mode
-  preview.style.display = 'block';
-  previewText.textContent = 'Improving...';
-
-  try {
-    const resp = await fetch(APPS_SCRIPT_URL + '?action=improveText&section=' + encodeURIComponent(sectionKey) + '&text=' + encodeURIComponent(raw));
-    const data = await resp.json();
-    if (data.result) {
-      previewText.textContent = data.result;
-      preview.dataset.improved = data.result;
-      preview.dataset.areaId = areaId;
-    }
-  } catch (err) { previewText.textContent = 'Error: ' + err.message; }
-}
-
+// ── FORM HELPERS ──
 function acceptAI(btn) {
-  const preview = btn.closest('.ai-preview');
-  const area = document.getElementById(preview.dataset.areaId);
-  area.value = preview.dataset.improved;
-  finalTranscript = area.value;
+  const preview  = btn.closest('.ai-preview');
+  const areaId   = preview.dataset.areaId;
+  const improved = preview.dataset.improved;
+  if (areaId && improved) {
+    const area = document.getElementById(areaId);
+    area.value = improved;
+    finalTranscript = improved;
+    area.style.borderColor = 'var(--green)';
+    setTimeout(() => { area.style.borderColor = ''; }, 800);
+  }
   preview.style.display = 'none';
 }
 
-function discardAI(btn) { btn.closest('.ai-preview').style.display = 'none'; }
+function discardAI(btn) {
+  btn.closest('.ai-preview').style.display = 'none';
+}
 
-// --- REST OF FORM LOGIC ---
+// ── CONCLUSION ──
 let conclusionState = '';
 function setConclusion(val){
   conclusionState = val;
   document.getElementById('btnApprove').classList.toggle('active', val==='approved');
-  document.getElementById('btnReject').classList.toggle('active', val==='rejected');
+  document.getElementById('btnReject').classList.toggle('active',  val==='rejected');
   document.getElementById('approvedFor').style.display = val==='approved' ? 'block' : 'none';
   updateSummary();
 }
+document.addEventListener('change', e => { if(e.target.type==='checkbox') updateSummary(); });
+function getChecked(){ return ['chk1','chk2','chk3','chk4','chk5','chk6'].map(id=>document.getElementById(id)).filter(el=>el.checked).map(el=>el.value); }
 function updateSummary(){
   const box = document.getElementById('conclusionSummary');
   if(!conclusionState){ box.style.display='none'; return; }
   box.style.display = 'block';
-  box.className = conclusionState === 'rejected' ? 'rejected' : '';
-  document.getElementById('sumTitle').textContent = conclusionState==='approved' ? '✔ Approved' : '✘ Not Approved';
-  document.getElementById('sumDetail').textContent = conclusionState==='approved' ? 'Approved categories selected.' : 'Criteria not met.';
+  if(conclusionState==='rejected'){
+    box.className = 'rejected';
+    document.getElementById('sumTitle').textContent  = '✘ Not Approved';
+    document.getElementById('sumDetail').textContent = 'Driver did not meet evaluation criteria.';
+  } else {
+    box.className = '';
+    const items = getChecked();
+    document.getElementById('sumTitle').textContent  = '✔ Approved';
+    document.getElementById('sumDetail').textContent = items.length ? 'Approved for: '+items.join(', ') : 'No specific categories selected yet.';
+  }
 }
 
+// ── NEXT EVAL ──
+function setNextEval(type){
+  ['date','Post Incident/As Required','N/A'].forEach((t,i) => {
+    const ids = ['ep-date','ep-incident','ep-na'];
+    document.getElementById(ids[i]).classList.toggle('active', t===type);
+  });
+  document.getElementById('nextEvalDate').style.display = type==='date' ? 'block' : 'none';
+}
+setNextEval('date');
+
+// ── SIGNATURES ──
 const canvas1 = document.getElementById('sig1'), canvas2 = document.getElementById('sig2');
 const pad1 = new SignaturePad(canvas1), pad2 = new SignaturePad(canvas2);
 
 function resizeCanvas(){
-  [canvas1, canvas2].forEach(c => {
-    const r = window.devicePixelRatio || 1;
-    c.width = c.offsetWidth * r; c.height = c.offsetHeight * r;
+  [[canvas1, pad1],[canvas2, pad2]].forEach(([c, pad]) => {
+    var r = Math.max(window.devicePixelRatio || 1, 1);
+    var newW = Math.round(c.offsetWidth  * r);
+    var newH = Math.round(c.offsetHeight * r);
+    if (Math.abs(c.width - newW) < 4 && Math.abs(c.height - newH) < 4) return;
+    var data = pad.toData();
+    c.width  = newW;
+    c.height = newH;
     c.getContext('2d').scale(r, r);
+    if (data && data.length) pad.fromData(data);
   });
 }
-window.addEventListener('resize', resizeCanvas); resizeCanvas();
+var resizeTimer = null;
+window.addEventListener('resize', function(){
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(resizeCanvas, 250);
+});
+resizeCanvas();
 
-function updateEndOptions() {
-  const cls = document.getElementById('dlClass').value;
-  const sel = document.getElementById('dlEnd');
-  sel.innerHTML = cls === '1' ? '<option>Air brake included</option>' : '<option value="">None</option><option value="Q">Q — Air Brake</option>';
-}
-updateEndOptions();
-
-async function submitForm(){
-  const btn = document.getElementById('submitBtn');
-  if(!document.getElementById('driverName').value || !conclusionState) { alert('Name and Conclusion required.'); return; }
-  btn.textContent = '⟳ SUBMITTING...'; btn.disabled = true;
-  
-  const d = {
-    driver: document.getElementById('driverName').value,
-    trainer: document.getElementById('trainer').value,
-    date: document.getElementById('evalDate').value,
-    conclusion: conclusionState,
-    sig1: pad1.toDataURL(), sig2: pad2.toDataURL()
+// ── COLLECT DATA ──
+function collectFormData(){
+  const trainerSel = document.getElementById('trainer');
+  const trainer    = trainerSel.value==='__other__' ? document.getElementById('trainerOther').value : trainerSel.value;
+  const dlClass    = document.getElementById('dlClass');
+  const dlEnd      = document.getElementById('dlEnd');
+  const dlLabel    = dlClass.options[dlClass.selectedIndex].text + (dlEnd.value ? ' + ' + dlEnd.value : '');
+  const epIds    = [{id:'ep-date',val:'date'},{id:'ep-incident',val:'Post Incident / As Required'},{id:'ep-na',val:'N/A'}];
+  const nextType = (epIds.find(e => document.getElementById(e.id).classList.contains('active')) || epIds[0]).val;
+  const nextDate = nextType==='date' ? document.getElementById('nextEvalDate').value : nextType;
+  return {
+    division:        document.getElementById('division').value,
+    trainer,
+    driver:          document.getElementById('driverName').value,
+    date:            document.getElementById('evalDate').value,
+    dlClass:          dlLabel,
+    unit:            document.getElementById('unitNum').value,
+    txt1:            document.getElementById('txt1').value,
+    txt2:            document.getElementById('txt2').value,
+    txt3:            document.getElementById('txt3').value,
+    txt4:            document.getElementById('txt4').value,
+    txt5:            document.getElementById('txt5').value,
+    strengths:       document.getElementById('strengths').value,
+    weakness:        document.getElementById('weakness').value,
+    recommendations: document.getElementById('recommendations').value,
+    conclusion:      conclusionState==='approved' ? 'Approved — '+(getChecked().join(', ')||'General') : 'Not Approved',
+    nextEval:        nextDate,
+    notes:           document.getElementById('notes').value,
+    sig1:            pad1.isEmpty() ? '' : pad1.toDataURL(),
+    sig2:            pad2.isEmpty() ? '' : pad2.toDataURL(),
   };
+}
+
+// ── SUBMIT ──
+async function submitForm(){
+  const d   = collectFormData();
+  const btn = document.getElementById('submitBtn');
+
+  if(!d.driver)        { alert('Please enter the driver name.'); return; }
+  if(!conclusionState) { alert('Please select Approved or Not Approved.'); return; }
+  if(pad1.isEmpty())   { alert('Trainer signature is required.'); return; }
+  if(pad2.isEmpty())   { alert('Driver signature is required.'); return; }
+
+  btn.textContent = '⟳ SUBMITTING…';
+  btn.disabled    = true;
 
   try {
-    const resp = await fetch(APPS_SCRIPT_URL, { method:'POST', body: JSON.stringify({action:'submitForm', data:d}) });
-    alert('Submitted Successfully'); window.location.reload();
-  } catch(e) { alert('Error submitting'); btn.disabled = false; btn.textContent = 'SUBMIT ASSESSMENT'; }
+    const resp = await fetch(APPS_SCRIPT_URL, {
+      method:  'POST',
+      headers: { 'Content-Type': 'text/plain' },
+      body:    JSON.stringify({ action: 'submitForm', data: d })
+    });
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const result = await resp.json();
+    if (result.error) throw new Error(result.error);
+
+    btn.textContent      = '✔ SUBMITTED';
+    btn.style.background = '#005f20';
+    alert('✔ Assessment submitted!\n\nLogged to Sheets, PDF saved to Drive and emailed.');
+    window.location.reload();
+
+  } catch(err) {
+    console.error('Submit error:', err);
+    btn.textContent = 'SUBMIT ASSESSMENT';
+    btn.disabled    = false;
+    alert('⚠ Submission failed:\n' + err.message);
+  }
 }
 </script>
 </body>
