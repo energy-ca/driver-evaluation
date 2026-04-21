@@ -16,6 +16,7 @@
     --green: #00c853;
     --red:   #ff4444;
     --amber: #ffbb33;
+    --purple:#9c27b0;
     --dark:  #0e0e0e;
     --card:  #1a1a1a;
     --card2: #222;
@@ -49,12 +50,14 @@
   .dl-row { display:flex; gap:10px; }
   .dl-row select { flex:1; }
 
-  .controls { display:flex; gap:8px; margin-bottom:10px; }
+  .controls { display:flex; gap:8px; margin-bottom:10px; flex-wrap:wrap; }
   .btn { padding:12px 8px; border:none; border-radius:9px; font-weight:700; font-size:13px; cursor:pointer; font-family:'Barlow Condensed',sans-serif; letter-spacing:1px; transition:opacity .15s; }
   .btn:active { opacity:.75; }
-  .btn-start { background:#1a2e1a; color:var(--green); border:1px solid var(--green); flex:1.2; }
-  .btn-stop  { background:#2e1a1a; color:var(--red);   border:1px solid var(--red);   flex:1.2; }
-  .btn-ai    { background:#0d1e2e; color:var(--blue);  border:1px solid var(--blue);  flex:1.5; }
+  .btn-start   { background:#1a2e1a; color:var(--green);  border:1px solid var(--green);  flex:1.2; }
+  .btn-stop    { background:#2e1a1a; color:var(--red);    border:1px solid var(--red);    flex:1.2; }
+  .btn-ai      { background:#0d1e2e; color:var(--blue);   border:1px solid var(--blue);   flex:1.5; }
+  .btn-suggest { background:#1a0d2e; color:var(--purple); border:1px solid var(--purple); flex:1.5; }
+  .btn-cleanup { background:#2e2e1a; color:var(--amber);  border:1px solid var(--amber);  flex:1.5; }
 
   @keyframes recPulse { 0%{background:#2e1a1a;box-shadow:none;} 50%{background:#6a0000;box-shadow:0 0 10px #ff444466;} 100%{background:#2e1a1a;box-shadow:none;} }
   .rec-active { animation:recPulse 1s infinite !important; color:#fff !important; }
@@ -64,11 +67,19 @@
   textarea.input-active { border-color:var(--green) !important; }
 
   .ai-preview { display:none; margin-top:10px; background:#0a1a2a; border:1px solid var(--blue); border-radius:10px; overflow:hidden; animation:fadeIn .2s ease; }
+  .ai-preview.suggest-mode { background:#0a0a2a; border-color:var(--purple); }
+  .ai-preview.cleanup-mode { background:#2a2a0a; border-color:var(--amber); }
   @keyframes fadeIn { from{opacity:0;transform:translateY(-4px);}to{opacity:1;transform:translateY(0);} }
   .ai-preview-header { display:flex; align-items:center; justify-content:space-between; padding:8px 12px; background:#0d2040; border-bottom:1px solid #1a3a5a; }
+  .ai-preview.suggest-mode .ai-preview-header { background:#1a0d40; border-bottom-color:#2a1a5a; }
+  .ai-preview.cleanup-mode .ai-preview-header { background:#2a2a0d; border-bottom-color:#3a3a1a; }
   .ai-preview-header span { font-size:11px; font-weight:700; color:var(--blue); letter-spacing:1.5px; text-transform:uppercase; }
+  .ai-preview.suggest-mode .ai-preview-header span:first-child { color:var(--purple); }
+  .ai-preview.cleanup-mode .ai-preview-header span:first-child { color:var(--amber); }
   .ai-preview-text { padding:12px; font-size:14px; line-height:1.6; color:#d0e8f8; white-space:pre-wrap; word-break:break-word; }
   .ai-preview-actions { display:flex; gap:8px; padding:10px 12px; border-top:1px solid #1a3a5a; }
+  .ai-preview.suggest-mode .ai-preview-actions { border-top-color:#2a1a5a; }
+  .ai-preview.cleanup-mode .ai-preview-actions { border-top-color:#3a3a1a; }
   .btn-accept  { flex:1; padding:11px; background:#0d2e1a; color:var(--green); border:1px solid var(--green); border-radius:8px; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:14px; cursor:pointer; letter-spacing:1px; }
   .btn-accept:active { background:var(--green); color:#000; }
   .btn-discard { flex:1; padding:11px; background:#2e1a1a; color:var(--red); border:1px solid var(--red); border-radius:8px; font-family:'Barlow Condensed',sans-serif; font-weight:700; font-size:14px; cursor:pointer; letter-spacing:1px; }
@@ -175,7 +186,9 @@
     <div class="controls">
       <button class="btn btn-start" onclick="voiceStart('strengths',this)">▶ START</button>
       <button class="btn btn-stop"  onclick="voiceStop()">■ STOP</button>
-      <button class="btn btn-ai"    onclick="aiImprove('strengths','strengths')">✦ AI</button>
+      <button class="btn btn-ai"      onclick="aiImprove('strengths','strengths')">✦ AI IMPROVE</button>
+      <button class="btn btn-suggest" onclick="aiSuggest('strengths','strengths')">+ SUGGEST</button>
+      <button class="btn btn-cleanup" onclick="aiCleanup('strengths')">⚡ CLEAN UP</button>
     </div>
     <textarea id="strengths" class="fi" placeholder="Driver strengths observed…"></textarea>
 
@@ -183,7 +196,9 @@
     <div class="controls">
       <button class="btn btn-start" onclick="voiceStart('weakness',this)">▶ START</button>
       <button class="btn btn-stop"  onclick="voiceStop()">■ STOP</button>
-      <button class="btn btn-ai"    onclick="aiImprove('weakness','weaknesses')">✦ AI</button>
+      <button class="btn btn-ai"      onclick="aiImprove('weakness','weaknesses')">✦ AI IMPROVE</button>
+      <button class="btn btn-suggest" onclick="aiSuggest('weakness','weaknesses')">+ SUGGEST</button>
+      <button class="btn btn-cleanup" onclick="aiCleanup('weakness')">⚡ CLEAN UP</button>
     </div>
     <textarea id="weakness" class="fi" placeholder="Areas requiring improvement…"></textarea>
 
@@ -191,7 +206,9 @@
     <div class="controls">
       <button class="btn btn-start" onclick="voiceStart('recommendations',this)">▶ START</button>
       <button class="btn btn-stop"  onclick="voiceStop()">■ STOP</button>
-      <button class="btn btn-ai"    onclick="aiImprove('recommendations','recommendations')">✦ AI</button>
+      <button class="btn btn-ai"      onclick="aiImprove('recommendations','recommendations')">✦ AI IMPROVE</button>
+      <button class="btn btn-suggest" onclick="aiSuggest('recommendations','recommendations')">+ SUGGEST</button>
+      <button class="btn btn-cleanup" onclick="aiCleanup('recommendations')">⚡ CLEAN UP</button>
     </div>
     <textarea id="recommendations" class="fi" placeholder="Recommended actions or training…"></textarea>
 
@@ -258,10 +275,8 @@
 <script>
 // ── Force fresh state — no cached form data ever ──
 if (window.performance && window.performance.navigation.type === 2) {
-  // Page loaded from back/forward cache — force hard reload
   window.location.reload(true);
 }
-// Clear any browser-autofilled form fields
 window.addEventListener('load', () => {
   document.querySelectorAll('input.fi, textarea.fi, select.fi').forEach(el => {
     if (el.type !== 'date' && el.tagName !== 'SELECT') el.value = '';
@@ -316,7 +331,9 @@ const sectionDefs = [
         <div class="controls">
           <button class="btn btn-start" onclick="voiceStart('${s.id}',this)">▶ START</button>
           <button class="btn btn-stop"  onclick="voiceStop()">■ STOP</button>
-          <button class="btn btn-ai"    onclick="aiImprove('${s.id}','${s.title}')">✦ AI</button>
+          <button class="btn btn-ai"      onclick="aiImprove('${s.id}','${s.title}')">✦ AI IMPROVE</button>
+          <button class="btn btn-suggest" onclick="aiSuggest('${s.id}','${s.title}')">+ SUGGEST</button>
+          <button class="btn btn-cleanup" onclick="aiCleanup('${s.id}')">⚡ CLEAN UP</button>
         </div>
         <textarea id="${s.id}" class="fi" placeholder="Speak or type observations…"></textarea>
       </div>
@@ -331,7 +348,9 @@ document.getElementById('notes-container').innerHTML = `
       <div class="controls">
         <button class="btn btn-start" onclick="voiceStart('notes',this)">▶ START</button>
         <button class="btn btn-stop"  onclick="voiceStop()">■ STOP</button>
-        <button class="btn btn-ai"    onclick="aiImprove('notes','general notes')">✦ AI</button>
+        <button class="btn btn-ai"      onclick="aiImprove('notes','general notes')">✦ AI IMPROVE</button>
+        <button class="btn btn-suggest" onclick="aiSuggest('notes','general notes')">+ SUGGEST</button>
+        <button class="btn btn-cleanup" onclick="aiCleanup('notes')">⚡ CLEAN UP</button>
       </div>
       <textarea id="notes" class="fi" placeholder="Additional notes…"></textarea>
     </div>
@@ -342,17 +361,14 @@ let recognition=null, activeArea=null;
 let finalTranscript='', isRecording=false, restartTimer=null;
 let sessionId=0;
 
-// Remove words from newText that already appear at the end of existing text
 function dedupe(existing, newText) {
   if (!existing.trim() || !newText) return newText;
   const exWords  = existing.trim().toLowerCase().split(/\s+/);
   const newWords = newText.trim().toLowerCase().split(/\s+/);
-  // Check if end of existing overlaps with start of newText
   for (let overlap = Math.min(exWords.length, newWords.length); overlap > 0; overlap--) {
     const tail  = exWords.slice(-overlap).join(' ');
     const head  = newWords.slice(0, overlap).join(' ');
     if (tail === head) {
-      // Return only the non-overlapping remainder
       const remainder = newText.trim().split(/\s+/).slice(overlap).join(' ');
       return remainder;
     }
@@ -409,11 +425,11 @@ function cleanup(){ document.querySelectorAll('.btn-start').forEach(b=>b.classLi
 // ── APPS SCRIPT URL ──
 const APPS_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyu6mbuoc2io8SxulkpZmJRfT4eOb-qlRa7kettDYkmn27CN3t7oSoFlc0ItEytoAcfTQ/exec';
 
-// ── AI IMPROVE ──
+// ── AI IMPROVE (replace text) ──
 async function aiImprove(areaId, sectionKey) {
   const area = document.getElementById(areaId);
   const raw  = area.value.trim();
-  if (!raw) { area.placeholder = 'Add some text first, then press ✦ AI.'; return; }
+  if (!raw) { area.placeholder = 'Add some text first, then press ✦ AI IMPROVE.'; return; }
 
   let preview = area.nextElementSibling;
   if (!preview || !preview.classList.contains('ai-preview')) {
@@ -421,12 +437,12 @@ async function aiImprove(areaId, sectionKey) {
     preview.className = 'ai-preview';
     preview.innerHTML = `
       <div class="ai-preview-header">
-        <span>✦ AI Suggestion</span>
+        <span>✦ AI Improvement</span>
         <span style="font-size:11px;color:var(--muted);">Review before accepting</span>
       </div>
       <div class="ai-preview-text"></div>
       <div class="ai-preview-actions">
-        <button class="btn-accept"  onclick="acceptAI(this)">✔ ACCEPT</button>
+        <button class="btn-accept"  onclick="acceptAI(this, 'replace')">✔ REPLACE</button>
         <button class="btn-discard" onclick="discardAI(this)">✘ DISCARD</button>
       </div>`;
     area.insertAdjacentElement('afterend', preview);
@@ -437,9 +453,10 @@ async function aiImprove(areaId, sectionKey) {
   const aiBtn       = controls ? controls.querySelector('.btn-ai') : null;
 
   preview.style.display = 'block';
+  preview.className = 'ai-preview';
   previewText.textContent = 'Improving your text…';
   previewText.style.color = 'var(--muted)';
-  if (aiBtn) { aiBtn.textContent = '⟳ AI'; aiBtn.classList.add('ai-loading'); }
+  if (aiBtn) { aiBtn.textContent = '⟳ AI IMPROVE'; aiBtn.classList.add('ai-loading'); }
 
   try {
     const url = APPS_SCRIPT_URL
@@ -465,18 +482,146 @@ async function aiImprove(areaId, sectionKey) {
     previewText.style.color = 'var(--red)';
     preview.dataset.improved = '';
   } finally {
-    if (aiBtn) { aiBtn.textContent = '✦ AI'; aiBtn.classList.remove('ai-loading'); }
+    if (aiBtn) { aiBtn.textContent = '✦ AI IMPROVE'; aiBtn.classList.remove('ai-loading'); }
   }
 }
 
-function acceptAI(btn) {
+// ── AI SUGGEST (add text to end) ──
+async function aiSuggest(areaId, sectionKey) {
+  const area = document.getElementById(areaId);
+  const existing = area.value.trim();
+
+  let preview = area.nextElementSibling;
+  if (!preview || !preview.classList.contains('ai-preview')) {
+    preview = document.createElement('div');
+    preview.className = 'ai-preview suggest-mode';
+    preview.innerHTML = `
+      <div class="ai-preview-header">
+        <span>+ AI Suggestions</span>
+        <span style="font-size:11px;color:var(--muted);">Additional points to consider</span>
+      </div>
+      <div class="ai-preview-text"></div>
+      <div class="ai-preview-actions">
+        <button class="btn-accept"  onclick="acceptAI(this, 'append')">✔ ADD TO END</button>
+        <button class="btn-discard" onclick="discardAI(this)">✘ DISCARD</button>
+      </div>`;
+    area.insertAdjacentElement('afterend', preview);
+  }
+
+  const previewText = preview.querySelector('.ai-preview-text');
+  const controls    = area.previousElementSibling;
+  const sugBtn      = controls ? controls.querySelector('.btn-suggest') : null;
+
+  preview.style.display = 'block';
+  preview.className = 'ai-preview suggest-mode';
+  previewText.textContent = 'Generating suggestions…';
+  previewText.style.color = 'var(--muted)';
+  if (sugBtn) { sugBtn.textContent = '⟳ SUGGEST'; sugBtn.classList.add('ai-loading'); }
+
+  try {
+    const url = APPS_SCRIPT_URL
+      + '?action=suggestText'
+      + '&section=' + encodeURIComponent(sectionKey)
+      + '&text='    + encodeURIComponent(existing);
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+    if (data.error) throw new Error(data.error);
+    const suggestions = (data.result || '').trim();
+    if (suggestions) {
+      previewText.textContent = suggestions;
+      previewText.style.color = '#e8d0f8';
+      preview.dataset.improved = suggestions;
+      preview.dataset.areaId   = areaId;
+    } else {
+      throw new Error('Empty response from AI');
+    }
+  } catch (err) {
+    console.error('AI suggest error:', err);
+    previewText.textContent = '⚠ ' + err.message;
+    previewText.style.color = 'var(--red)';
+    preview.dataset.improved = '';
+  } finally {
+    if (sugBtn) { sugBtn.textContent = '+ SUGGEST'; sugBtn.classList.remove('ai-loading'); }
+  }
+}
+
+// ── AI CLEANUP (remove unwanted text) ──
+async function aiCleanup(areaId) {
+  const area = document.getElementById(areaId);
+  const raw  = area.value.trim();
+  if (!raw) { area.placeholder = 'Add some text first, then press ⚡ CLEAN UP.'; return; }
+
+  let preview = area.nextElementSibling;
+  if (!preview || !preview.classList.contains('ai-preview')) {
+    preview = document.createElement('div');
+    preview.className = 'ai-preview cleanup-mode';
+    preview.innerHTML = `
+      <div class="ai-preview-header">
+        <span>⚡ Clean Up</span>
+        <span style="font-size:11px;color:var(--muted);">Removing off-topic content</span>
+      </div>
+      <div class="ai-preview-text"></div>
+      <div class="ai-preview-actions">
+        <button class="btn-accept"  onclick="acceptAI(this, 'replace')">✔ REPLACE</button>
+        <button class="btn-discard" onclick="discardAI(this)">✘ DISCARD</button>
+      </div>`;
+    area.insertAdjacentElement('afterend', preview);
+  }
+
+  const previewText = preview.querySelector('.ai-preview-text');
+  const controls    = area.previousElementSibling;
+  const cleanBtn    = controls ? controls.querySelector('.btn-cleanup') : null;
+
+  preview.style.display = 'block';
+  preview.className = 'ai-preview cleanup-mode';
+  previewText.textContent = 'Cleaning up text…';
+  previewText.style.color = 'var(--muted)';
+  if (cleanBtn) { cleanBtn.textContent = '⟳ CLEAN UP'; cleanBtn.classList.add('ai-loading'); }
+
+  try {
+    const url = APPS_SCRIPT_URL
+      + '?action=cleanupText'
+      + '&text=' + encodeURIComponent(raw);
+    const resp = await fetch(url);
+    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+    const data = await resp.json();
+    if (data.error) throw new Error(data.error);
+    const cleaned = (data.result || '').trim();
+    if (cleaned) {
+      previewText.textContent = cleaned;
+      previewText.style.color = '#f8f0d0';
+      preview.dataset.improved = cleaned;
+      preview.dataset.areaId   = areaId;
+    } else {
+      throw new Error('Empty response from AI');
+    }
+  } catch (err) {
+    console.error('AI cleanup error:', err);
+    previewText.textContent = '⚠ ' + err.message;
+    previewText.style.color = 'var(--red)';
+    preview.dataset.improved = '';
+  } finally {
+    if (cleanBtn) { cleanBtn.textContent = '⚡ CLEAN UP'; cleanBtn.classList.remove('ai-loading'); }
+  }
+}
+
+// ── ACCEPT AI ──
+function acceptAI(btn, mode) {
   const preview  = btn.closest('.ai-preview');
   const areaId   = preview.dataset.areaId;
   const improved = preview.dataset.improved;
   if (areaId && improved) {
     const area = document.getElementById(areaId);
-    area.value = improved;
-    finalTranscript = improved;
+    if (mode === 'append') {
+      // Add to end with spacing
+      const current = area.value.trim();
+      area.value = current ? current + '\n\n' + improved : improved;
+    } else {
+      // Replace
+      area.value = improved;
+    }
+    finalTranscript = area.value;
     area.style.borderColor = 'var(--green)';
     setTimeout(() => { area.style.borderColor = ''; }, 800);
   }
@@ -533,8 +678,6 @@ function resizeCanvas(){
     var r = Math.max(window.devicePixelRatio || 1, 1);
     var newW = Math.round(c.offsetWidth  * r);
     var newH = Math.round(c.offsetHeight * r);
-    // Ignore tiny differences — mobile toolbar show/hide causes
-    // 1-2px shifts that should not wipe the signature
     if (Math.abs(c.width - newW) < 4 && Math.abs(c.height - newH) < 4) return;
     var data = pad.toData();
     c.width  = newW;
@@ -583,9 +726,7 @@ function collectFormData(){
   };
 }
 
-
 // ── SUBMIT ──
-// Uses POST so large signature images don't blow up the URL length limit
 async function submitForm(){
   const d   = collectFormData();
   const btn = document.getElementById('submitBtn');
